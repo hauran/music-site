@@ -1,3 +1,10 @@
+// Define section gradients to match CSS (moved to global scope)
+const sectionGradients = {
+    'about': 'linear-gradient(135deg, rgba(249, 247, 243, 0.9) 0%, rgba(255, 253, 250, 0.9) 100%)',
+    'videos': 'linear-gradient(135deg, rgba(230, 242, 230, 0.9) 0%, rgba(240, 250, 240, 0.9) 100%)',
+    'contact': 'linear-gradient(135deg, rgba(240, 230, 245, 0.9) 0%, rgba(250, 240, 255, 0.9) 100%)'
+};
+
 // Initialize Lucide icons
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all icons with specific options
@@ -22,8 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Setup header color change on scroll
     setupHeaderColorChange();
     
-    // Log to confirm icons are initialized
-    console.log('Icons initialized:', document.querySelectorAll('.bg-icon').length);
+    // Setup section parallax effect
+    setupSectionParallax();
 });
 
 // Function to change header color based on current section
@@ -32,33 +39,55 @@ function setupHeaderColorChange() {
     const sections = document.querySelectorAll('.section');
     const navLinks = document.querySelectorAll('.nav-links a');
     
-    // Get section colors from CSS
-    const aboutColor = getComputedStyle(document.getElementById('about')).backgroundColor;
-    const videosColor = getComputedStyle(document.getElementById('videos')).backgroundColor;
-    const contactColor = getComputedStyle(document.getElementById('contact')).backgroundColor;
+    // Track if we're currently in a manual navigation
+    let isManualNavigation = false;
+    let manualNavigationTimeout;
     
-    console.log('Section colors:', { aboutColor, videosColor, contactColor });
+    // Function to set manual navigation mode
+    window.setManualNavigationMode = function(duration = 1000) {
+        isManualNavigation = true;
+        clearTimeout(manualNavigationTimeout);
+        
+        // Reset after the specified duration
+        manualNavigationTimeout = setTimeout(() => {
+            isManualNavigation = false;
+        }, duration);
+    };
     
     // Function to determine which section is currently in view
     function getCurrentSection() {
         const headerHeight = header.offsetHeight;
-        const scrollPosition = window.scrollY + headerHeight;
+        
+        // Calculate the position where we want the color to change
+        // This is set to the middle of the header
+        const triggerPosition = window.scrollY + (headerHeight / 2);
         
         for (let i = sections.length - 1; i >= 0; i--) {
             const section = sections[i];
-            // Use the same offset logic as in the smooth scrolling function
-            const sectionTop = section.offsetTop - headerHeight;
             
-            if (scrollPosition >= sectionTop) {
+            // Get the exact top position of the section
+            const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+            
+            // Get the section's content top (accounting for padding)
+            const sectionContentTop = sectionTop + parseFloat(getComputedStyle(section).paddingTop);
+            
+            // Change color when the middle of the header crosses the content start
+            if (triggerPosition >= sectionContentTop) {
                 return section.id;
             }
         }
         
+        // Default to the first section if no conditions are met
         return sections[0].id;
     }
     
     // Function to update header color
     function updateHeaderColor() {
+        // Skip if we're in manual navigation mode
+        if (isManualNavigation) {
+            return;
+        }
+        
         const currentSection = getCurrentSection();
         
         // Remove all active classes
@@ -67,26 +96,32 @@ function setupHeaderColorChange() {
         });
         
         // Add active class to current section link
-        document.querySelector(`.nav-links a[href="#${currentSection}"]`).classList.add('active');
+        try {
+            const activeLink = document.querySelector(`.nav-links a[href="#${currentSection}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        } catch (error) {
+            // Silently handle errors
+        }
         
-        // Set header color based on current section
-        switch (currentSection) {
-            case 'about':
-                header.style.backgroundColor = aboutColor;
-                break;
-            case 'videos':
-                header.style.backgroundColor = videosColor;
-                break;
-            case 'contact':
-                header.style.backgroundColor = contactColor;
-                break;
-            default:
-                header.style.backgroundColor = aboutColor;
+        // Set header background gradient based on current section
+        if (sectionGradients[currentSection]) {
+            header.style.background = sectionGradients[currentSection];
         }
     }
     
-    // Update header color on scroll
-    window.addEventListener('scroll', updateHeaderColor);
+    // Update header color on scroll with throttling for better performance
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                updateHeaderColor();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
     
     // Initial update
     updateHeaderColor();
@@ -108,10 +143,8 @@ function setupHeaderShadow() {
 // Function to position background icons randomly
 function positionBackgroundIcons() {
     const backgroundIcons = document.querySelectorAll('.bg-icon');
-    const iconSizes = [80, 100, 120, 150]; // Larger sizes for better visibility
+    const iconSizes = [100, 120, 150, 180]; // Increased sizes for better visibility
     const placedIcons = []; // Array to track placed icons and their boundaries
-    
-    console.log('Positioning icons:', backgroundIcons.length);
     
     // Clear any existing styles first
     backgroundIcons.forEach(icon => {
@@ -187,7 +220,6 @@ function positionBackgroundIcons() {
         // If we couldn't find a valid position, hide this icon
         if (!position) {
             icon.style.display = 'none';
-            console.log(`Icon ${index} hidden due to lack of space`);
             return;
         }
         
@@ -207,12 +239,10 @@ function positionBackgroundIcons() {
         icon.style.display = 'block';
         icon.style.opacity = '1';
         icon.style.color = '#000';
-        icon.style.strokeWidth = '1px'; // Ensure thin stroke width
+        icon.style.strokeWidth = '1.2px'; // Match the CSS value
         
         // Add this icon to the placed icons array
         placedIcons.push(position);
-        
-        console.log(`Icon ${index} positioned at ${position.top}px, ${position.left}px with size ${size}px and rotation ${rotation}deg`);
     });
     
     // Force a repaint
@@ -232,13 +262,41 @@ function setupSmoothScrolling() {
             e.preventDefault();
             
             const targetId = link.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
             
-            // Use only the header height as offset to align with color change
+            const targetSection = document.querySelector(targetId);
+            if (!targetSection) {
+                return;
+            }
+            
+            // Get the section's content top (accounting for padding)
+            const sectionTop = targetSection.getBoundingClientRect().top + window.scrollY;
+            const sectionPadding = parseFloat(getComputedStyle(targetSection).paddingTop);
+            const sectionContentTop = sectionTop + sectionPadding;
+            
+            // Use header height as offset
             const headerHeight = header.offsetHeight;
             
+            // Enable manual navigation mode to prevent scroll detection from overriding
+            if (window.setManualNavigationMode) {
+                window.setManualNavigationMode(1500); // Prevent auto-detection for 1.5 seconds
+            }
+            
+            // Set active class manually - IMPORTANT: Do this before scrolling
+            navLinks.forEach(navLink => {
+                navLink.classList.remove('active');
+            });
+            
+            link.classList.add('active');
+            
+            // Update header background color
+            const sectionId = targetId.substring(1); // Remove the # from the ID
+            if (sectionGradients && sectionGradients[sectionId]) {
+                header.style.background = sectionGradients[sectionId];
+            }
+            
+            // Scroll to the section
             window.scrollTo({
-                top: targetSection.offsetTop - headerHeight,
+                top: sectionContentTop - headerHeight,
                 behavior: 'smooth'
             });
         });
@@ -263,4 +321,29 @@ window.addEventListener('scroll', () => {
         // Apply transform with both translation and original rotation
         icon.style.transform = `translateY(${yPos}px) rotate(${rotation}deg)`;
     });
-}); 
+});
+
+// Function to add subtle parallax effect to sections
+function setupSectionParallax() {
+    const sections = document.querySelectorAll('.section');
+    
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        
+        sections.forEach((section) => {
+            // Calculate how far the section is from the top of the viewport
+            const sectionTop = section.getBoundingClientRect().top;
+            const sectionHeight = section.offsetHeight;
+            const viewportHeight = window.innerHeight;
+            
+            // Only apply effect when section is in view
+            if (sectionTop < viewportHeight && sectionTop > -sectionHeight) {
+                // Calculate a value between -10 and 10 based on scroll position
+                const yValue = (sectionTop / viewportHeight) * 10;
+                
+                // Apply a subtle transform to the section's background
+                section.style.backgroundPosition = `center ${yValue}px`;
+            }
+        });
+    });
+}

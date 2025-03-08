@@ -1,0 +1,588 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden; /* Prevent scrolling */
+    background-color: #1a2b40;
+    color: #fff;
+    height: 100vh;
+    width: 100vw;
+    position: fixed; /* Ensure no bouncing/scrolling on mobile */
+}
+
+/* Base layer styling - static, mobile-optimized */
+.scene-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    left: 0;
+    top: 0;
+    /* Center critical content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Place all layers with specific z-index values for proper stacking */
+.sky-layer { z-index: 1; }
+.stars-layer { z-index: 2; }
+.clouds-distant-layer { z-index: 3; }
+.clouds-layer { z-index: 4; }
+.mountains-far-layer { z-index: 5; }
+.mountains-far-mid-layer { z-index: 6; }
+.mountains-near-layer { z-index: 7; }
+.mountains-mid-near-layer { z-index: 8; }
+.forest-background-layer { z-index: 9; }
+.fog-layer { z-index: 10; }
+.forest-midground-layer { z-index: 11; }
+.forest-foreground-layer { z-index: 12; }
+.ground-layer { z-index: 13; }
+
+/* Sky with warm sunset colors that gradually darken */
+.sky-layer {
+    background: linear-gradient(to bottom, 
+                #2d3f58 0%, 
+                #596a82 30%, 
+                #9a8178 60%, 
+                #e6b58a 80%, 
+                #f7d19e 100%);
+    z-index: 1;
+    animation: darkening 300s linear forwards;
+}
+
+/* Sunset to night transition animation */
+@keyframes darkening {
+    0% {
+        background: linear-gradient(to bottom, 
+                #2d3f58 0%, 
+                #596a82 30%, 
+                #9a8178 60%, 
+                #e6b58a 80%, 
+                #f7d19e 100%);
+    }
+    20% {
+        background: linear-gradient(to bottom, 
+                #263349 0%, 
+                #4a5a72 30%, 
+                #8a7169 60%, 
+                #d6a57a 80%, 
+                #e7c18e 100%);
+    }
+    40% {
+        background: linear-gradient(to bottom, 
+                #1f293a 0%, 
+                #3a4a62 30%, 
+                #7a615a 60%, 
+                #c6956a 80%, 
+                #d7b17e 100%);
+    }
+    60% {
+        background: linear-gradient(to bottom, 
+                #18202b 0%, 
+                #2a3a52 30%, 
+                #6a514a 60%, 
+                #b6855a 80%, 
+                #c7a16e 100%);
+    }
+    80% {
+        background: linear-gradient(to bottom, 
+                #11161c 0%, 
+                #1a2a42 30%, 
+                #5a413a 60%, 
+                #a6754a 80%, 
+                #b7915e 100%);
+    }
+    100% {
+        background: linear-gradient(to bottom, 
+                #0a0c10 0%, 
+                #0a1a32 30%, 
+                #4a312a 60%, 
+                #96653a 80%, 
+                #a7814e 100%);
+    }
+}
+
+/* Sun element - with smoother animation */
+.sky-layer::after {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: #ffe69c;
+    border-radius: 50%;
+    left: 40%;
+    top: 30%; 
+    box-shadow: 0 0 80px 20px rgba(255, 207, 124, 0.8);
+    filter: blur(4px);
+    animation: sunFade 300s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    will-change: opacity, background, box-shadow;
+    transform: translateZ(0); /* Hardware acceleration */
+}
+
+/* Sun fading animation - smoother transitions */
+@keyframes sunFade {
+    0% {
+        opacity: 1;
+        background: #ffe69c;
+        box-shadow: 0 0 80px 20px rgba(255, 207, 124, 0.8);
+    }
+    20% {
+        opacity: 0.9;
+        background: #ffe09a;
+        box-shadow: 0 0 75px 18px rgba(250, 202, 119, 0.75);
+    }
+    40% {
+        opacity: 0.8;
+        background: #ffd68c;
+        box-shadow: 0 0 70px 15px rgba(245, 197, 114, 0.7);
+    }
+    60% {
+        opacity: 0.6;
+        background: #ffce84;
+        box-shadow: 0 0 65px 12px rgba(240, 192, 109, 0.6);
+    }
+    80% {
+        opacity: 0.3;
+        background: #ffc67c;
+        box-shadow: 0 0 50px 8px rgba(235, 187, 104, 0.4);
+    }
+    100% {
+        opacity: 0.1;
+        background: #ffb66c;
+        box-shadow: 0 0 40px 5px rgba(225, 177, 94, 0.3);
+    }
+}
+
+/* Stars layer - only in the top blue portion, gradually brightening, minimally moving */
+.stars-layer {
+    position: absolute;
+    width: 120%; /* Extra width to prevent edges from showing during minimal movement */
+    height: 50%; /* Only take up top half of the sky */
+    top: -5%; /* Offset a bit to prevent edges from showing */
+    left: -5%;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+                      radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+                      radial-gradient(circle, rgba(255, 255, 255, 0.6) 1px, transparent 1px);
+    background-size: 100px 100px, 150px 150px, 200px 200px;
+    background-position: 0 0, 50px 50px, 100px 100px;
+    z-index: 1.5; /* Keep stars behind the mountains but above the sky */
+    opacity: 0.2; /* Start nearly invisible */
+    /* Add a mask to fade out stars as they approach the middle */
+    mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    animation: starsBrightening 300s linear forwards;
+    transform: translateZ(-10px); /* Put stars far back to minimize movement */
+    will-change: opacity, background-image; /* Only animate opacity and brightness, not position */
+}
+
+/* Stars brightening animation */
+@keyframes starsBrightening {
+    0% {
+        opacity: 0.2;
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+                          radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+                          radial-gradient(circle, rgba(255, 255, 255, 0.6) 1px, transparent 1px);
+    }
+    40% {
+        opacity: 0.4;
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.8) 1px, transparent 1px),
+                          radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+                          radial-gradient(circle, rgba(255, 255, 255, 0.7) 1px, transparent 1px);
+    }
+    70% {
+        opacity: 0.7;
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+                          radial-gradient(circle, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+                          radial-gradient(circle, rgba(255, 255, 255, 0.8) 1px, transparent 1px);
+    }
+    100% {
+        opacity: 1;
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 1) 1px, transparent 1px),
+                          radial-gradient(circle, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+                          radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 1px);
+        height: 100%; /* Stars expand to full height in night mode */
+    }
+}
+
+/* Cloud container - now with multiple wispy clouds */
+.clouds-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Wispy, irregular main cloud */
+.clouds-layer::before {
+    content: '';
+    position: absolute;
+    top: 24%;
+    left: 20%;
+    width: 180px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 100% 80% 70% 90% / 80% 90% 60% 70%;
+    transform: rotate(-5deg) scale(1.2, 0.6);
+    filter: blur(15px);
+    animation: cloudDrift 140s linear infinite;
+    box-shadow: 
+        60px -5px 40px 5px rgba(255, 255, 255, 0.09),
+        140px 8px 50px 10px rgba(255, 255, 255, 0.07),
+        250px -10px 60px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Second wispy formation */
+.clouds-layer::after {
+    content: '';
+    position: absolute;
+    top: 15%;
+    right: 30%;
+    width: 200px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 90% 75% 85% 80% / 70% 80% 90% 85%;
+    transform: rotate(3deg) scale(1.5, 0.5);
+    filter: blur(18px);
+    animation: cloudDrift 180s linear infinite reverse;
+    box-shadow: 
+        -80px 15px 70px 15px rgba(255, 255, 255, 0.06),
+        -200px -10px 80px 20px rgba(255, 255, 255, 0.04);
+}
+
+/* Additional cloud element 1 */
+.clouds-layer .additional-cloud-1 {
+    content: '';
+    position: absolute;
+    top: 28%;
+    left: 55%;
+    width: 220px;
+    height: 25px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 85% 95% 75% 65% / 75% 85% 90% 80%;
+    transform: rotate(2deg) scale(1.4, 0.55);
+    filter: blur(16px);
+    animation: cloudDrift 160s linear infinite 30s;
+    box-shadow: 
+        -100px 10px 60px 12px rgba(255, 255, 255, 0.07),
+        -230px -5px 70px 15px rgba(255, 255, 255, 0.05);
+}
+
+/* Additional cloud element 2 */
+.clouds-layer .additional-cloud-2 {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 75%;
+    width: 190px;
+    height: 18px;
+    background-color: rgba(255, 255, 255, 0.09);
+    border-radius: 70% 90% 80% 75% / 90% 75% 80% 85%;
+    transform: rotate(-4deg) scale(1.3, 0.45);
+    filter: blur(17px);
+    animation: cloudDrift 190s linear infinite 75s;
+    box-shadow: 
+        70px 15px 55px 10px rgba(255, 255, 255, 0.06),
+        -90px -10px 65px 15px rgba(255, 255, 255, 0.08);
+}
+
+/* Update cloud drift animation to not use transform with translateZ */
+@keyframes cloudDrift {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-5deg) scale(1.2, 0.6);
+    }
+    25% {
+        transform: translateX(-150px) translateY(10px) rotate(-3deg) scale(1.3, 0.55);
+    }
+    50% {
+        transform: translateX(-300px) translateY(5px) rotate(-6deg) scale(1.15, 0.65);
+    }
+    75% {
+        transform: translateX(-150px) translateY(-5px) rotate(-4deg) scale(1.25, 0.6);
+    }
+    100% {
+        transform: translateX(0) translateY(0) rotate(-5deg) scale(1.2, 0.6);
+    }
+}
+
+/* Distant cloud layer - more diffuse and irregular */
+.clouds-distant-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.clouds-distant-layer::before {
+    content: '';
+    position: absolute;
+    top: 18%;
+    left: 35%;
+    width: 250px;
+    height: 15px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 85% 75% 90% 80% / 90% 80% 70% 85%;
+    transform: rotate(2deg) scale(2, 0.4);
+    filter: blur(20px);
+    animation: distantCloudDrift 220s linear infinite;
+    box-shadow: 
+        120px 20px 100px 25px rgba(255, 255, 255, 0.03),
+        -150px -15px 90px 20px rgba(255, 255, 255, 0.04);
+}
+
+.clouds-distant-layer::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 25%;
+    width: 300px;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 80% 90% 70% 85% / 85% 70% 90% 75%;
+    transform: rotate(-3deg) scale(1.8, 0.3);
+    filter: blur(22px);
+    animation: distantCloudDrift 260s linear infinite reverse;
+}
+
+@keyframes distantCloudDrift {
+    0% {
+        transform: translateX(0) translateY(0) rotate(2deg) scale(2, 0.4);
+    }
+    33% {
+        transform: translateX(-200px) translateY(15px) rotate(3deg) scale(1.9, 0.45);
+    }
+    66% {
+        transform: translateX(-400px) translateY(5px) rotate(1deg) scale(2.1, 0.35);
+    }
+    100% {
+        transform: translateX(0) translateY(0) rotate(2deg) scale(2, 0.4);
+    }
+}
+
+/* Fog layer - horizontal atmospheric gradient with softer transitions */
+.fog-layer {
+    position: absolute;
+    width: 110%; /* Extend beyond screen edges */
+    height: 70%; /* Increase height for more coverage */
+    top: 15%;
+    left: -5%; /* Negative offset to prevent edge visibility */
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.02) 10%,
+        rgba(255, 255, 255, 0.04) 20%,
+        rgba(255, 255, 255, 0.06) 30%,
+        rgba(255, 255, 255, 0.08) 40%,
+        rgba(255, 255, 255, 0.08) 60%,
+        rgba(255, 255, 255, 0.06) 70%,
+        rgba(255, 255, 255, 0.04) 80%,
+        rgba(255, 255, 255, 0.02) 90%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    z-index: 5;
+    opacity: 0.35;
+    filter: blur(20px);
+    pointer-events: none;
+}
+
+/* Additional horizontal fog bands for more depth */
+.fog-layer::before {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    top: -10%;
+    left: -10%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.06) 0%,
+        rgba(255, 255, 255, 0.04) 30%,
+        rgba(255, 255, 255, 0.02) 60%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    filter: blur(25px);
+    opacity: 0.3;
+}
+
+/* Far mountains - highly asymmetrical design */
+.mountains-far-layer {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,220 L100,190 L200,220 L240,205 L300,230 L380,165 L450,190 L520,140 L600,190 L700,230 L750,160 L820,190 L900,220 L1000,180 L1080,200 L1150,140 L1200,170 L1200,300 Z" fill="%23534f55"/></svg>');
+    background-size: 120% 100%;
+    z-index: 2;
+    opacity: 0.6;
+    transform: translateX(-12%); /* Moved further back */
+    filter: blur(3px);
+}
+
+/* Extra far-mid mountain layer */
+.mountains-far-mid-layer {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    top: -10%;
+    left: -10%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,235 L70,215 L130,235 L180,205 L220,235 L290,195 L350,215 L430,185 L490,215 L550,195 L620,215 L720,175 L820,205 L900,185 L980,215 L1050,195 L1120,215 L1200,195 L1200,300 Z" fill="%23635c5f"/></svg>');
+    background-size: 130% 100%;
+    background-repeat: repeat-x;
+    z-index: 2.25;
+    transform: translateX(5%); /* Positioned between far and middle */
+    filter: blur(2.5px);
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+}
+
+/* Middle mountains - asymmetrical with offset peaks */
+.mountains-near-layer {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,230 L45,220 L65,225 L80,210 L95,215 L120,220 L150,230 L180,225 L215,210 L250,190 L270,200 L300,230 L330,220 L350,215 L380,210 L410,220 L450,230 L480,225 L510,215 L550,180 L590,190 L620,200 L650,210 L690,200 L715,190 L780,180 L810,190 L850,215 L900,200 L935,185 L970,175 L1000,190 L1050,210 L1090,200 L1150,190 L1200,210 L1200,300 Z" fill="%23736b67"/></svg>');
+    background-size: 130% 100%;
+    z-index: 3;
+    bottom: 0;
+    transform: translateX(18%); /* Adjusted position */
+    filter: blur(1.5px);
+}
+
+/* Nearest mountains - varied peaks and strongly offset */
+.forest-background-layer {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,240 L50,220 L90,240 L170,210 L230,240 L300,220 L350,240 L420,205 L480,240 L530,225 L600,240 L680,210 L750,240 L830,220 L900,240 L980,215 L1050,240 L1130,225 L1200,245 L1200,300 Z" fill="%23998d84"/></svg>');
+    background-size: 140% 100%;
+    z-index: 4;
+    bottom: 0;
+    transform: translateX(-15%);
+}
+
+/* Horizon fog bank - more subtle */
+.fog-layer {
+    position: relative;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0) 30%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.15) 60%,
+        rgba(255, 255, 255, 0) 70%
+    );
+    z-index: 5;
+    opacity: 0.6;
+    filter: blur(12px);
+}
+
+/* Hills with sparse triangular trees - adjusted for smaller ground */
+.forest-midground-layer {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,265 L1200,265 L1200,300 Z" fill="%23433d39"/><path d="M150,300 L150,265 L120,225 L90,265 L150,265 Z M350,300 L350,265 L320,195 L290,265 L350,265 Z M550,300 L550,265 L520,215 L490,265 L550,265 Z M750,300 L750,265 L720,205 L690,265 L750,265 Z M950,300 L950,265 L920,195 L890,265 L950,265 Z" fill="%23292420"/></svg>');
+    background-size: 100% 100%;
+    z-index: 6;
+    bottom: 0;
+    transform: translateZ(-2px);
+}
+
+/* Foreground with a few tall pine trees - adjusted for smaller ground */
+.forest-foreground-layer {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,275 Q200,260 400,275 Q600,255 800,275 Q1000,260 1200,275 L1200,300 Z" fill="%23352c25"/><path d="M1020,300 L1020,265 L990,205 L960,265 L1020,265 Z M1100,300 L1100,265 L1070,175 L1040,265 L1100,265 Z M840,300 L840,265 L810,175 L780,265 L840,265 Z M200,300 L200,265 L170,205 L140,265 L200,265 Z" fill="%23162820"/><path d="M890,80 L920,140 L905,140 L940,220 L925,220 L960,300 L820,300 L855,220 L840,220 L875,140 L860,140 Z" fill="%23112218"/><path d="M1160,80 L1190,150 L1175,150 L1210,230 L1190,230 L1240,300 L1080,300 L1130,230 L1115,230 L1145,150 L1130,150 Z" fill="%23112218"/><path d="M155,300 L195,210 L175,210 L215,130 L255,210 L235,210 L275,300 Z" fill="%23143025"/></svg>');
+    background-size: 100% 100%;
+    z-index: 7;
+    bottom: 0;
+    transform: translateZ(-1px);
+}
+
+/* Ground with gentler hills and less brown color - reduced height */
+.ground-layer {
+    background: linear-gradient(to bottom, #265d26 0%, #1a3f1a 100%); /* Meadow green gradient */
+    height: 15%; /* Reduced from 25% to 15% */
+    bottom: 0;
+    top: auto;
+    z-index: 8;
+    border-radius: 50% 50% 0 0 / 15% 15% 0 0;
+    transform: translateZ(0);
+}
+
+/* Animations */
+@keyframes walkAnimation {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+    /* Center the view on the most important part of the scene */
+    .mountains-far-layer,
+    .mountains-far-mid-layer,
+    .mountains-near-layer {
+        left: 50%;
+        transform: translateX(-50%); /* Center horizontally */
+        width: 150%; /* Wider to ensure coverage */
+    }
+    
+    /* Center forest elements */
+    .forest-background-layer,
+    .forest-midground-layer,
+    .forest-foreground-layer {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150%; /* Wider to ensure coverage */
+    }
+    
+    /* Position clouds optimally for mobile viewport */
+    .clouds-layer::before {
+        left: 35%;
+    }
+    
+    .clouds-layer::after {
+        right: 25%;
+    }
+    
+    .clouds-layer .additional-cloud-1 {
+        left: 20%;
+    }
+    
+    .clouds-layer .additional-cloud-2 {
+        left: 50%;
+    }
+    
+    /* Ensure fog covers the viewport width */
+    .fog-layer {
+        width: 120%;
+        left: -10%;
+    }
+    
+    /* Ground extends fully across viewport */
+    .ground-layer {
+        width: 150%;
+        left: -25%;
+    }
+
+    /* Ground extends fully across viewport */
+    .gras-layer {
+        width: 50px;
+    }
+    
+    /* Wider sky to ensure full coverage */
+    .sky-layer {
+        width: 120%;
+        left: -10%;
+    }
+    
+    /* Ensure stars cover the full viewport */
+    .stars-layer {
+        width: 120%;
+        left: -10%;
+    }
+}
+
+/* Extra shimmer effect on certain elements */
+@keyframes shimmer {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}

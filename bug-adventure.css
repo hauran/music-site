@@ -503,7 +503,7 @@ body {
 
 /* Foreground with a few tall pine trees - adjusted for smaller ground */
 .forest-foreground-layer {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,275 Q200,260 400,275 Q600,255 800,275 Q1000,260 1200,275 L1200,300 Z" fill="%23352c25"/><path d="M510,300 L510,265 L490,205 L470,265 L510,265 Z M610,300 L610,265 L590,175 L570,265 L610,265 Z M450,300 L450,265 L430,175 L410,265 L450,265 Z M660,300 L660,265 L640,205 L620,265 L660,265 Z" fill="%230a1812"/><path d="M490,120 L475,150 L482,150 L467,180 L477,180 L460,210 L475,210 L455,240 L470,240 L455,300 L525,300 L510,240 L525,240 L505,210 L520,210 L498,180 L510,180 L495,150 L502,150 Z" fill="%23091d12"/><path d="M760,140 L745,170 L752,170 L737,200 L747,200 L730,230 L745,230 L725,260 L740,260 L730,300 L790,300 L780,260 L795,260 L775,230 L790,230 L770,200 L780,200 L765,170 L772,170 Z" fill="%23091d12"/><path d="M375,170 L365,200 L370,200 L358,230 L365,230 L355,260 L362,260 L355,300 L395,300 L388,260 L395,260 L385,230 L392,230 L380,200 L385,200 Z" fill="%23102315"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,275 Q200,260 400,275 Q600,255 800,275 Q1000,260 1200,275 L1200,300 Z" fill="%23164020"/><path d="M560,300 L560,265 L540,205 L520,265 L560,265 Z M660,300 L660,265 L640,175 L620,265 L660,265 Z M500,300 L500,265 L480,175 L460,265 L500,265 Z M710,300 L710,265 L690,205 L670,265 L710,265 Z" fill="%230f2a18"/><path d="M540,120 L525,150 L532,150 L517,180 L527,180 L510,210 L525,210 L505,240 L520,240 L505,300 L575,300 L560,240 L575,240 L555,210 L570,210 L548,180 L560,180 L545,150 L552,150 Z" fill="%23091d12"/><path d="M810,140 L795,170 L802,170 L787,200 L797,200 L780,230 L795,230 L775,260 L790,260 L780,300 L840,300 L830,260 L845,260 L825,230 L840,230 L820,200 L830,200 L815,170 L822,170 Z" fill="%23091d12"/><path d="M410,170 L400,200 L405,200 L393,230 L400,230 L390,260 L397,260 L390,300 L430,300 L423,260 L430,260 L420,230 L427,230 L415,200 L420,200 Z" fill="%23102315"/></svg>');
     z-index: 12;
     bottom: 0;
     transform: translateZ(-1px);
@@ -511,7 +511,7 @@ body {
 
 /* Ground with gentler hills and less brown color - reduced height */
 .ground-layer {
-    background: linear-gradient(to bottom, #265d26 0%, #1a3f1a 100%); /* Meadow green gradient */
+    background: linear-gradient(to bottom, #2d6d30 0%, #1f4d21 100%); /* Richer green gradient */
     height: 15%; /* Reduced from 25% to 15% */
     bottom: 0;
     top: auto;

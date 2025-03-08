@@ -15,14 +15,6 @@ body {
     position: fixed; /* Ensure no bouncing/scrolling on mobile */
 }
 
-/* Base scene container */
-.parallax-container {
-    position: relative;
-    height: 100vh;
-    width: 100%;
-    overflow: hidden;
-}
-
 /* Scene with proper aspect ratio */
 .scene {
     position: absolute;
@@ -51,19 +43,6 @@ body {
 }
 
 /* Place all layers with specific z-index values for proper stacking */
-.sky-layer { z-index: 1; }
-.clouds-distant-layer { z-index: 3; }
-.clouds-layer { z-index: 4; }
-.mountains-far-layer { z-index: 5; }
-.mountains-far-mid-layer { z-index: 6; }
-.mountains-near-layer { z-index: 7; }
-.mountains-mid-near-layer { z-index: 8; }
-.fog-layer { z-index: 10; }
-.forest-midground-layer { z-index: 11; }
-.forest-foreground-layer { z-index: 12; }
-.ground-layer { z-index: 13; }
-
-/* Sky with warm sunset colors that gradually darken */
 .sky-layer {
     background: linear-gradient(to bottom, 
                 #2d3f58 0%, 
@@ -72,103 +51,89 @@ body {
                 #e6b58a 80%, 
                 #f7d19e 100%);
     z-index: 1;
-    animation: darkening 300s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    transition: background 120s ease-in-out; /* Simple 2-minute transition */
 }
 
-/* Sunset to night transition animation - more incremental steps for smoother transition */
-@keyframes darkening {
-    0% {
-        background: linear-gradient(to bottom, 
-                #2d3f58 0%, 
-                #596a82 30%, 
-                #9a8178 60%, 
-                #e6b58a 80%, 
-                #f7d19e 100%);
-    }
-    10% {
-        background: linear-gradient(to bottom, 
-                #293b52 0%, 
-                #52627a 30%, 
-                #94796f 60%, 
-                #deae82 80%, 
-                #efca96 100%);
-    }
-    20% {
-        background: linear-gradient(to bottom, 
-                #263349 0%, 
-                #4a5a72 30%, 
-                #8a7169 60%, 
-                #d6a57a 80%, 
-                #e7c18e 100%);
-    }
-    30% {
-        background: linear-gradient(to bottom, 
-                #222d40 0%, 
-                #42526a 30%, 
-                #826860 60%, 
-                #ce9d72 80%, 
-                #dfb986 100%);
-    }
-    40% {
-        background: linear-gradient(to bottom, 
-                #1f293a 0%, 
-                #3a4a62 30%, 
-                #7a615a 60%, 
-                #c6956a 80%, 
-                #d7b17e 100%);
-    }
-    50% {
-        background: linear-gradient(to bottom, 
-                #1c2432 0%, 
-                #32425a 30%, 
-                #725a50 60%, 
-                #be8d62 80%, 
-                #cfa976 100%);
-    }
-    60% {
-        background: linear-gradient(to bottom, 
-                #18202b 0%, 
-                #2a3a52 30%, 
-                #6a514a 60%, 
-                #b6855a 80%, 
-                #c7a16e 100%);
-    }
-    70% {
-        background: linear-gradient(to bottom, 
-                #151c24 0%, 
-                #22324a 30%, 
-                #624940 60%, 
-                #ae7d52 80%, 
-                #bf9966 100%);
-    }
-    80% {
-        background: linear-gradient(to bottom, 
-                #11161c 0%, 
-                #1a2a42 30%, 
-                #5a413a 60%, 
-                #a6754a 80%, 
-                #b7915e 100%);
-    }
-    90% {
-        background: linear-gradient(to bottom, 
-                #0d1016 0%, 
-                #12223a 30%, 
-                #523932 60%, 
-                #9e6d42 80%, 
-                #af8956 100%);
-    }
-    100% {
-        background: linear-gradient(to bottom, 
+/* Add a class that will be applied with JavaScript to trigger the transition */
+.sky-layer.night {
+    background: linear-gradient(to bottom, 
                 #0a0c10 0%, 
                 #0a1a32 30%, 
                 #4a312a 60%, 
                 #96653a 80%, 
                 #a7814e 100%);
-    }
 }
 
+/* Stars layer with radial gradients */
+.stars-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%; /* Cover the entire scene height */
+    top: 0;
+    left: 0;
+    background-color: transparent; /* Start with a transparent background */
+    /* No animation of background-image, set it all directly here */
+    background-image: 
+        /* Large bright stars */
+        radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.8) 1px, transparent 1px),
+        /* Medium stars */
+        radial-gradient(circle, rgba(255, 255, 255, 0.7) 0.8px, transparent 0.8px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.6) 0.8px, transparent 0.8px),
+        /* Small stars */
+        radial-gradient(circle, rgba(255, 255, 255, 0.7) 0.5px, transparent 0.5px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.5) 0.5px, transparent 0.5px);
+    
+    /* Many different sizes to prevent patterns and ensure full coverage */
+    background-size: 
+        170px 170px, /* Large bright stars */
+        190px 190px,
+        130px 130px, /* Medium stars */
+        110px 110px,
+        80px 80px,   /* Small stars */
+        70px 70px;
+    
+    /* Many different positions to ensure stars on the sides */
+    background-position: 
+        0px 0px, 
+        90px 25px, 
+        30px 45px, 
+        60px 85px, 
+        20px 10px, 
+        50px 50px;
+    
+    z-index: 2;
+    opacity: 0.8; /* Increased opacity (was 0.2) to make stars more visible */
+    animation: starsBrightening 300s linear forwards;
+    will-change: opacity; /* Only animate opacity, nothing else */
+}
+
+/* Shooting stars layer */
+.shooting-stars-layer {
+    position: absolute;
+    width: 100%;
+    height: 70%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.sun-layer { z-index: 3; }
+.clouds-distant-layer { z-index: 4; }
+.clouds-layer { z-index: 5; }
+.mountains-far-layer { z-index: 6; }
+.mountains-far-mid-layer { z-index: 7; }
+.mountains-near-layer { z-index: 8; }
+.mountains-mid-near-layer { z-index: 9; }
+.fog-layer { z-index: 10; }
+.forest-midground-layer { z-index: 11; }
+.ground-layer { z-index: 12; }
+.forest-foreground-layer { z-index: 13; }
+
 /* Sun element - with smoother animation */
-.sky-layer::after {
+.sun-layer::after {
     content: '';
     position: absolute;
     width: 80px;
@@ -179,13 +144,13 @@ body {
     top: 30%; 
     box-shadow: 0 0 80px 20px rgba(255, 207, 124, 0.8);
     filter: blur(4px);
-    animation: sunFade 300s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    animation: sunSet 180s linear forwards;
     will-change: opacity, background, box-shadow, top;
     z-index: 4; /* Ensure sun is behind mountains but in front of sky */
 }
 
 /* Sun fading animation - smoother transitions */
-@keyframes sunFade {
+@keyframes sunSet {
     0% {
         opacity: 1;
         background: #ffe69c;
@@ -223,21 +188,6 @@ body {
         top: 75%;
     }
 }
-/* Stars brightening animation - ONLY changes opacity, not position or size */
-@keyframes starsBrightening {
-    0% {
-        opacity: 0.2;
-    }
-    40% {
-        opacity: 0.4;
-    }
-    70% {
-        opacity: 0.7;
-    }
-    100% {
-        opacity: 1;
-    }
-}
 
 /* Cloud container - now with multiple wispy clouds */
 .clouds-layer {
@@ -245,7 +195,6 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    z-index: 1;
 }
 
 /* Wispy, irregular main cloud */
@@ -346,7 +295,6 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    z-index: 1;
 }
 
 .clouds-distant-layer::before {
@@ -415,7 +363,6 @@ body {
         rgba(255, 255, 255, 0.02) 90%,
         rgba(255, 255, 255, 0) 100%
     );
-    z-index: 5;
     opacity: 0.35;
     filter: blur(20px);
     pointer-events: none;
@@ -444,7 +391,6 @@ body {
 .mountains-far-layer {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,220 L100,190 L200,220 L240,205 L300,230 L380,165 L450,190 L520,140 L600,190 L700,230 L750,160 L820,190 L900,220 L1000,180 L1080,200 L1150,140 L1200,170 L1200,300 Z" fill="%23534f55"/></svg>');
     background-size: 120% 100%;
-    z-index: 5;
     opacity: 1;
     transform: translateX(-12%); /* Moved further back */
     filter: blur(3px);
@@ -471,7 +417,6 @@ body {
 .mountains-near-layer {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,230 L45,220 L65,225 L80,210 L95,215 L120,220 L150,230 L180,225 L215,210 L250,190 L270,200 L300,230 L330,220 L350,215 L380,210 L410,220 L450,230 L480,225 L510,215 L550,180 L590,190 L620,200 L650,210 L690,200 L715,190 L780,180 L810,190 L850,215 L900,200 L935,185 L970,175 L1000,190 L1050,210 L1090,200 L1150,190 L1200,210 L1200,300 Z" fill="%23736b67"/></svg>');
     background-size: 130% 100%;
-    z-index: 3;
     bottom: 0;
     transform: translateX(18%); /* Adjusted position */
     filter: blur(1.5px);
@@ -487,7 +432,6 @@ body {
         rgba(255, 255, 255, 0.15) 60%,
         rgba(255, 255, 255, 0) 70%
     );
-    z-index: 5;
     opacity: 0.6;
     filter: blur(12px);
 }
@@ -495,7 +439,6 @@ body {
 /* Hills with sparse triangular trees - adjusted for smaller ground */
 .forest-midground-layer {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,265 L1200,265 L1200,300 Z" fill="%23433d39"/><path d="M435,300 L435,265 L420,225 L405,265 L435,265 Z M540,300 L540,265 L525,195 L510,265 L540,265 Z M640,300 L640,265 L625,215 L610,265 L640,265 Z M740,300 L740,265 L725,205 L710,265 L740,265 Z M350,300 L350,265 L335,195 L320,265 L350,265 Z" fill="%23193024"/></svg>');
-    z-index: 11;
     bottom: 0;
     transform: translateZ(-2px);
 }
@@ -503,18 +446,16 @@ body {
 /* Foreground with a few tall pine trees - adjusted for smaller ground */
 .forest-foreground-layer {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,275 Q200,260 400,275 Q600,255 800,275 Q1000,260 1200,275 L1200,300 Z" fill="%23164020"/><path d="M560,300 L560,265 L540,205 L520,265 L560,265 Z M660,300 L660,265 L640,175 L620,265 L660,265 Z M500,300 L500,265 L480,175 L460,265 L500,265 Z M710,300 L710,265 L690,205 L670,265 L710,265 Z" fill="%230f2a18"/><path d="M540,120 L525,150 L532,150 L517,180 L527,180 L510,210 L525,210 L505,240 L520,240 L505,300 L575,300 L560,240 L575,240 L555,210 L570,210 L548,180 L560,180 L545,150 L552,150 Z" fill="%23091d12"/><path d="M810,140 L795,170 L802,170 L787,200 L797,200 L780,230 L795,230 L775,260 L790,260 L780,300 L840,300 L830,260 L845,260 L825,230 L840,230 L820,200 L830,200 L815,170 L822,170 Z" fill="%23091d12"/><path d="M410,170 L400,200 L405,200 L393,230 L400,230 L390,260 L397,260 L390,300 L430,300 L423,260 L430,260 L420,230 L427,230 L415,200 L420,200 Z" fill="%23102315"/></svg>');
-    z-index: 12;
     bottom: 0;
     transform: translateZ(-1px);
 }
 
 /* Ground with gentler hills and less brown color - reduced height */
 .ground-layer {
-    background: linear-gradient(to bottom, #2d6d30 0%, #1f4d21 100%); /* Richer green gradient */
+    background: linear-gradient(to bottom, #3b703e 0%, #1f4d21 100%); /* Richer green gradient */
     height: 15%; /* Reduced from 25% to 15% */
     bottom: 0;
     top: auto;
-    z-index: 8;
     border-radius: 50% 50% 0 0 / 15% 15% 0 0;
     transform: translateZ(0);
 }
@@ -526,156 +467,4 @@ body {
 
 @media (min-width: 1201px) {
     /* No specific overrides needed - our aspect ratio approach handles this */
-}
-
-/* Add shooting stars layer that appears toward end of sunset */
-.shooting-stars-layer {
-    position: absolute;
-    width: 100%;
-    height: 70%;
-    top: 0;
-    left: 0;
-    z-index: 6; /* Ensure it's above mountains */
-    pointer-events: none;
-    overflow: visible;
-}
-
-/* First shooting star - diagonal down-left movement */
-.shooting-star-1 {
-    position: absolute;
-    top: 10%;
-    right: -10px; /* Start off-screen on the right */
-    width: 4px;
-    height: 4px;
-    background-color: white;
-    border-radius: 50%;
-    box-shadow: 0 0 10px 2px white;
-    animation: shootingStar1Diagonal 6s linear infinite; /* New diagonal animation */
-    transform: rotate(-20deg); /* FIXED: Negative rotation for downward path */
-    will-change: transform, opacity; /* Performance optimization */
-    transform-style: preserve-3d; /* Additional performance boost */
-    backface-visibility: hidden; /* Helps prevent flickering */
-}
-
-/* Second shooting star - steeper diagonal down-left movement */
-.shooting-star-2 {
-    position: absolute;
-    top: 15%;
-    right: -10px; /* Start off-screen on the right */
-    width: 4px;
-    height: 4px;
-    background-color: white;
-    border-radius: 50%;
-    box-shadow: 0 0 10px 2px white;
-    animation: shootingStar2Diagonal 6s linear infinite; /* New diagonal animation */
-    animation-delay: 2s;
-    transform: rotate(-35deg); /* FIXED: Negative rotation for downward path */
-    will-change: transform, opacity; /* Performance optimization */
-    transform-style: preserve-3d; /* Additional performance boost */
-    backface-visibility: hidden; /* Helps prevent flickering */
-}
-
-/* Third shooting star - reversed to move from LEFT TO RIGHT */
-.shooting-star-3 {
-    position: absolute;
-    top: 40%;
-    left: -10px; /* Start off-screen on the left */
-    right: auto;
-    width: 4px;
-    height: 4px;
-    background-color: white;
-    border-radius: 50%;
-    box-shadow: 0 0 10px 2px white;
-    animation: shootingStar3RightWard 6s linear infinite; /* New animation for right-moving star */
-    animation-delay: 4s;
-    transform: rotate(-15deg); /* Negative rotation for upward-right path */
-    will-change: transform, opacity; /* Performance optimization */
-    transform-style: preserve-3d; /* Additional performance boost */
-    backface-visibility: hidden; /* Helps prevent flickering */
-}
-
-/* Create tail effect for stars 1 and 2 */
-.shooting-star-1::after,
-.shooting-star-2::after {
-    content: '';
-    position: absolute;
-    top: 1px; /* Perfect center (stars are 4px tall) */
-    left: 0; /* Attach to the left side of the star */
-    width: 100px;
-    height: 1px;
-    background: linear-gradient(to right, white, transparent); /* Gradient goes right (behind the star) */
-    transform-origin: left center;
-}
-
-/* Special tail for the reversed star - pointing right */
-.shooting-star-3::after {
-    content: '';
-    position: absolute;
-    top: 1px; /* Perfect center (stars are 4px tall) */
-    right: 0; /* Attach to the right side of the star */
-    left: auto;
-    width: 100px;
-    height: 1px;
-    background: linear-gradient(to left, white, transparent); /* Gradient goes left (behind the rightward-moving star) */
-    transform-origin: right center;
-}
-
-/* New animation for star moving left to right - simplified for smoothness */
-@keyframes shootingStar3RightWard {
-    0% {
-        transform: translate(0, 0) rotate(-15deg);
-        opacity: 0;
-    }
-    10% {
-        transform: translate(calc(10vw), -13px) rotate(-15deg);
-        opacity: 1;
-    }
-    90% {
-        transform: translate(calc(90vw), -240px) rotate(-15deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(calc(100vw), -267px) rotate(-15deg);
-        opacity: 0;
-    }
-}
-
-/* Diagonal down-left animation for first star - simplified for smoothness */
-@keyframes shootingStar1Diagonal {
-    0% {
-        transform: translate(0, 0) rotate(-20deg);
-        opacity: 0;
-    }
-    10% {
-        transform: translate(calc(-10vw), 40px) rotate(-20deg);
-        opacity: 1;
-    }
-    90% {
-        transform: translate(calc(-90vw), 360px) rotate(-20deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(calc(-100vw), 400px) rotate(-20deg);
-        opacity: 0;
-    }
-}
-
-/* Steeper diagonal down-left animation for second star - simplified for smoothness */
-@keyframes shootingStar2Diagonal {
-    0% {
-        transform: translate(0, 0) rotate(-35deg);
-        opacity: 0;
-    }
-    10% {
-        transform: translate(calc(-10vw), 70px) rotate(-35deg);
-        opacity: 1;
-    }
-    90% {
-        transform: translate(calc(-90vw), 630px) rotate(-35deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(calc(-100vw), 700px) rotate(-35deg);
-        opacity: 0;
-    }
 }

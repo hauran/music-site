@@ -15,18 +15,39 @@ body {
     position: fixed; /* Ensure no bouncing/scrolling on mobile */
 }
 
-/* Base layer styling - static, mobile-optimized */
+/* Base scene container */
+.parallax-container {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Scene with proper aspect ratio */
+.scene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* This ensures all scene content maintains a 1200:800 aspect ratio */
+    aspect-ratio: 3/2;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 100vh;
+    max-width: 100vw;
+}
+
+/* Scene layers maintain aspect ratio */
 .scene-layer {
     position: absolute;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     left: 0;
     top: 0;
-    /* Center critical content */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    /* Use cover to ensure content fills space without squishing */
+    background-size: cover;
 }
 
 /* Place all layers with specific z-index values for proper stacking */
@@ -474,18 +495,16 @@ body {
 
 /* Hills with sparse triangular trees - adjusted for smaller ground */
 .forest-midground-layer {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,265 L1200,265 L1200,300 Z" fill="%23433d39"/><path d="M150,300 L150,265 L120,225 L90,265 L150,265 Z M350,300 L350,265 L320,195 L290,265 L350,265 Z M550,300 L550,265 L520,215 L490,265 L550,265 Z M750,300 L750,265 L720,205 L690,265 L750,265 Z M950,300 L950,265 L920,195 L890,265 L950,265 Z" fill="%23292420"/></svg>');
-    background-size: 100% 100%;
-    z-index: 6;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,265 L1200,265 L1200,300 Z" fill="%23433d39"/><path d="M435,300 L435,265 L420,225 L405,265 L435,265 Z M540,300 L540,265 L525,195 L510,265 L540,265 Z M640,300 L640,265 L625,215 L610,265 L640,265 Z M740,300 L740,265 L725,205 L710,265 L740,265 Z M350,300 L350,265 L335,195 L320,265 L350,265 Z" fill="%23193024"/></svg>');
+    z-index: 11;
     bottom: 0;
     transform: translateZ(-2px);
 }
 
 /* Foreground with a few tall pine trees - adjusted for smaller ground */
 .forest-foreground-layer {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,275 Q200,260 400,275 Q600,255 800,275 Q1000,260 1200,275 L1200,300 Z" fill="%23352c25"/><path d="M1020,300 L1020,265 L990,205 L960,265 L1020,265 Z M1100,300 L1100,265 L1070,175 L1040,265 L1100,265 Z M840,300 L840,265 L810,175 L780,265 L840,265 Z M200,300 L200,265 L170,205 L140,265 L200,265 Z" fill="%23162820"/><path d="M890,80 L920,140 L905,140 L940,220 L925,220 L960,300 L820,300 L855,220 L840,220 L875,140 L860,140 Z" fill="%23112218"/><path d="M1160,80 L1190,150 L1175,150 L1210,230 L1190,230 L1240,300 L1080,300 L1130,230 L1115,230 L1145,150 L1130,150 Z" fill="%23112218"/><path d="M155,300 L195,210 L175,210 L215,130 L255,210 L235,210 L275,300 Z" fill="%23143025"/></svg>');
-    background-size: 100% 100%;
-    z-index: 7;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,275 Q200,260 400,275 Q600,255 800,275 Q1000,260 1200,275 L1200,300 Z" fill="%23352c25"/><path d="M510,300 L510,265 L490,205 L470,265 L510,265 Z M610,300 L610,265 L590,175 L570,265 L610,265 Z M450,300 L450,265 L430,175 L410,265 L450,265 Z M660,300 L660,265 L640,205 L620,265 L660,265 Z" fill="%230a1812"/><path d="M490,120 L475,150 L482,150 L467,180 L477,180 L460,210 L475,210 L455,240 L470,240 L455,300 L525,300 L510,240 L525,240 L505,210 L520,210 L498,180 L510,180 L495,150 L502,150 Z" fill="%23091d12"/><path d="M760,140 L745,170 L752,170 L737,200 L747,200 L730,230 L745,230 L725,260 L740,260 L730,300 L790,300 L780,260 L795,260 L775,230 L790,230 L770,200 L780,200 L765,170 L772,170 Z" fill="%23091d12"/><path d="M375,170 L365,200 L370,200 L358,230 L365,230 L355,260 L362,260 L355,300 L395,300 L388,260 L395,260 L385,230 L392,230 L380,200 L385,200 Z" fill="%23102315"/></svg>');
+    z-index: 12;
     bottom: 0;
     transform: translateZ(-1px);
 }
@@ -510,79 +529,12 @@ body {
         transform: translateY(-3px);
     }
 }
-/* Mobile-specific adjustments */
-@media (max-width: 768px) {
-    /* Center the view on the most important part of the scene */
-    .mountains-far-layer,
-    .mountains-far-mid-layer,
-    .mountains-near-layer {
-        left: 50%;
-        transform: translateX(-50%); /* Center horizontally */
-        width: 150%; /* Wider to ensure coverage */
-    }
-    
-    /* Center forest elements */
-    .forest-background-layer,
-    .forest-midground-layer,
-    .forest-foreground-layer {
-        left: 50%;
-        transform: translateX(-50%);
-        width: 150%; /* Wider to ensure coverage */
-    }
-    
-    /* Position clouds optimally for mobile viewport */
-    .clouds-layer::before {
-        left: 35%;
-    }
-    
-    .clouds-layer::after {
-        right: 25%;
-    }
-    
-    .clouds-layer .additional-cloud-1 {
-        left: 20%;
-    }
-    
-    .clouds-layer .additional-cloud-2 {
-        left: 50%;
-    }
-    
-    /* Ensure fog covers the viewport width */
-    .fog-layer {
-        width: 120%;
-        left: -10%;
-    }
-    
-    /* Ground extends fully across viewport */
-    .ground-layer {
-        width: 150%;
-        left: -25%;
-    }
 
-    /* Ground extends fully across viewport */
-    .gras-layer {
-        width: 50px;
-    }
-    
-    /* Wider sky to ensure full coverage */
-    .sky-layer {
-        width: 120%;
-        left: -10%;
-    }
-    
-    /* Ensure stars cover the full viewport */
-    .stars-layer {
-        width: 120%;
-        left: -10%;
-    }
+/* Reset media queries - we'll use a different approach */
+@media (max-width: 1200px) {
+    /* No specific overrides needed - our aspect ratio approach handles this */
 }
 
-/* Extra shimmer effect on certain elements */
-@keyframes shimmer {
-    0% {
-        background-position: -100% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
+@media (min-width: 1201px) {
+    /* No specific overrides needed - our aspect ratio approach handles this */
 }

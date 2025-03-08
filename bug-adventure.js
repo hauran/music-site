@@ -71,8 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     }
     
-
-    
     // Add some ambient particles for atmosphere (only in sky)
     function addParticles() {
         const container = document.createElement('div');
@@ -82,18 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMobile = window.innerWidth <= 768;
         
         // Create particles
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 75; i++) { // Increased from 50 to 75 for better coverage
             const particle = document.createElement('div');
             particle.classList.add('particle');
             
-            // Position particles only in the top 70% of the screen (sky area)
-            // For mobile compatibility, keep particles contained within viewport
-            const leftPosition = isMobile ?
-                // For mobile, keep within central 90% of viewport
-                5 + (Math.random() * 90) :
-                // For desktop, use a wider area
-                20 + (Math.random() * 60);
-                
+            // Position particles evenly across the entire width (0-100%)
+            // and throughout the top 70% of the screen (sky area)
+            const leftPosition = Math.random() * 100; // Full width coverage (0-100%)
+            
             particle.style.left = `${leftPosition}%`;
             particle.style.top = `${Math.random() * 70}%`;
             
@@ -102,15 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
             particle.style.width = `${size}px`;
             particle.style.height = `${size}px`;
             
-            // Random opacity
-            particle.style.opacity = Math.random() * 0.7 + 0.3;
+            // Random base opacity - higher than before to make twinkle less dramatic
+            const baseOpacity = Math.random() * 0.3 + 0.5; // Between 0.5-0.8
+            particle.style.opacity = baseOpacity;
             
-            // Random animation duration
-            const duration = Math.random() * 20 + 10;
-            particle.style.animationDuration = `${duration}s`;
-            
-            // Random animation delay
-            particle.style.animationDelay = `${Math.random() * 10}s`;
+            // Random animation duration and delay for twinkling effect - MUCH faster
+            const twinkleDuration = Math.random() * 0.8 + 0.2; // Between 0.2-1 second (much faster)
+            particle.style.animationDuration = `${twinkleDuration}s`;
+            particle.style.animationDelay = `${Math.random() * 2}s`; // Random delay up to 2 seconds (reduced)
             
             container.appendChild(particle);
         }
@@ -141,18 +134,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 position: absolute;
                 background-color: rgba(255, 255, 255, 0.8);
                 border-radius: 50%;
-                animation: floatParticle 15s ease-in-out infinite;
+                animation: twinkle linear infinite;
+                transform-origin: center;
             }
             
-            @keyframes floatParticle {
+            /* Twinkling animation - more subtle opacity and scale changes */
+            @keyframes twinkle {
                 0% {
-                    transform: translateY(0);
+                    opacity: 0.7;
+                    transform: scale(0.9);
                 }
                 50% {
-                    transform: translateY(-20px);
+                    opacity: 0.9;
+                    transform: scale(1.1);
                 }
                 100% {
-                    transform: translateY(0);
+                    opacity: 0.7;
+                    transform: scale(0.9);
                 }
             }
             

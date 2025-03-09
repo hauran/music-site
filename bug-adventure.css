@@ -436,30 +436,6 @@ body {
     filter: blur(12px);
 }
 
-/* Hills with sparse triangular trees - adjusted for smaller ground */
-.forest-midground-layer {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,265 L1200,265 L1200,300 Z" fill="%23433d39"/><path d="M435,300 L435,265 L420,225 L405,265 L435,265 Z M540,300 L540,265 L525,195 L510,265 L540,265 Z M640,300 L640,265 L625,215 L610,265 L640,265 Z M740,300 L740,265 L725,205 L710,265 L740,265 Z M350,300 L350,265 L335,195 L320,265 L350,265 Z" fill="%23193024"/></svg>');
-    bottom: 0;
-    transform: translateZ(-2px);
-}
-
-/* Foreground with a few tall pine trees - adjusted for smaller ground */
-.forest-foreground-layer {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,275 Q200,260 400,275 Q600,255 800,275 Q1000,260 1200,275 L1200,300 Z" fill="%23164020"/><path d="M560,300 L560,265 L540,205 L520,265 L560,265 Z M660,300 L660,265 L640,175 L620,265 L660,265 Z M500,300 L500,265 L480,175 L460,265 L500,265 Z M710,300 L710,265 L690,205 L670,265 L710,265 Z" fill="%230f2a18"/><path d="M540,120 L525,150 L532,150 L517,180 L527,180 L510,210 L525,210 L505,240 L520,240 L505,300 L575,300 L560,240 L575,240 L555,210 L570,210 L548,180 L560,180 L545,150 L552,150 Z" fill="%23091d12"/><path d="M810,140 L795,170 L802,170 L787,200 L797,200 L780,230 L795,230 L775,260 L790,260 L780,300 L840,300 L830,260 L845,260 L825,230 L840,230 L820,200 L830,200 L815,170 L822,170 Z" fill="%23091d12"/><path d="M410,170 L400,200 L405,200 L393,230 L400,230 L390,260 L397,260 L390,300 L430,300 L423,260 L430,260 L420,230 L427,230 L415,200 L420,200 Z" fill="%23102315"/></svg>');
-    bottom: 0;
-    transform: translateZ(-1px);
-}
-
-/* Ground with gentler hills and less brown color - reduced height */
-.ground-layer {
-    background: linear-gradient(to bottom, #3b703e 0%, #1f4d21 100%); /* Richer green gradient */
-    height: 15%; /* Reduced from 25% to 15% */
-    bottom: 0;
-    top: auto;
-    border-radius: 50% 50% 0 0 / 15% 15% 0 0;
-    transform: translateZ(0);
-}
-
 /* Reset media queries - we'll use a different approach */
 @media (max-width: 1200px) {
     /* No specific overrides needed - our aspect ratio approach handles this */
@@ -467,4 +443,18 @@ body {
 
 @media (min-width: 1201px) {
     /* No specific overrides needed - our aspect ratio approach handles this */
+}
+
+/* Foreground with a few tall pine trees - adjusted for smaller ground */
+.forest-foreground-layer {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,275 Q200,260 400,275 Q600,255 800,275 Q1000,260 1200,275 L1200,300 Z" fill="%23164020"/><path d="M560,300 L560,260 L540,200 L520,260 L560,260 Z M660,300 L660,270 L640,180 L620,270 L660,270 Z M500,300 L500,255 L480,165 L460,255 L500,255 Z M710,300 L710,262 L690,202 L670,262 L710,262 Z" fill="%230f2a18"/><rect x="535" y="260" width="10" height="20" fill="%23613b22"/><rect x="635" y="270" width="10" height="20" fill="%23613b22"/><rect x="475" y="255" width="10" height="20" fill="%23613b22"/><rect x="685" y="262" width="10" height="20" fill="%23613b22"/><path d="M540,120 L525,150 L532,150 L517,180 L527,180 L510,210 L525,210 L505,240 L520,240 L505,300 L575,300 L560,240 L575,240 L555,210 L570,210 L548,180 L560,180 L545,150 L552,150 Z" fill="%23091d12"/><rect x="530" y="240" width="20" height="60" fill="%23613b22"/><path d="M810,140 L795,170 L802,170 L787,200 L797,200 L780,230 L795,230 L775,260 L790,260 L780,300 L840,300 L830,260 L845,260 L825,230 L840,230 L820,200 L830,200 L815,170 L822,170 Z" fill="%23091d12"/><rect x="802" y="260" width="16" height="40" fill="%23613b22"/><path d="M410,170 L400,200 L405,200 L393,230 L400,230 L390,260 L397,260 L390,300 L430,300 L423,260 L430,260 L420,230 L427,230 L415,200 L420,200 Z" fill="%23102315"/><rect x="403" y="260" width="14" height="40" fill="%23613b22"/></svg>');
+    bottom: 0;
+    transform: translateZ(-1px);
+}
+
+/* Midground with more trees */
+.forest-midground-layer {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice"><path d="M0,300 L0,275 Q200,260 400,275 Q600,260 800,275 Q1000,260 1200,275 L1200,300 Z" fill="%23173516" /><path d="M417,300 L417,258 L400,218 L383,258 L417,258 Z M467,300 L467,270 L450,220 L433,270 L467,270 Z M517,300 L517,262 L500,202 L483,262 L517,262 Z M567,300 L567,255 L550,210 L533,255 L567,255 Z M617,300 L617,268 L600,203 L583,268 L617,268 Z" fill="%23162c14" /><rect x="395" y="258" width="6" height="20" fill="%23613b22"/><rect x="445" y="270" width="6" height="20" fill="%23613b22"/><rect x="495" y="262" width="6" height="20" fill="%23613b22"/><rect x="545" y="255" width="6" height="20" fill="%23613b22"/><rect x="595" y="268" width="6" height="20" fill="%23613b22"/></svg>');
+    bottom: 0;
+    transform: translateZ(-3px) scale(1.4);
 }

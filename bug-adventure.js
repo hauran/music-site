@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Game elements
-    const gameContainer = document.querySelector('.game-container');
-    
     // Initialize
     function init() {
         // Set up event listeners
@@ -11,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.addEventListener('touchmove', preventScroll, { passive: false });
         
         // Add ambient elements
-        addDynamicStyles();
         addStars();
         addShootingStars();
         
@@ -87,259 +83,240 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Add random shooting stars
+    // Add shooting stars using recursive JavaScript function
     function addShootingStars() {
-        const container = document.createElement('div');
-        container.classList.add('shooting-stars-layer');
-        gameContainer.appendChild(container);
+        // Use the existing shooting-stars-layer from HTML
+        const container = document.querySelector('.shooting-stars-layer');
         
-        // Create 2-4 random shooting stars (increased from 1-3)
-        const numStars = Math.floor(Math.random() * 3) + 2;
+        // Clear any existing shooting stars from the HTML 
+        container.innerHTML = '';
         
-        for (let i = 0; i < numStars; i++) {
-            // Create the star element
-            const star = document.createElement('div');
-            star.classList.add('shooting-star');
+        // Add a counter to track the number of active shooting stars
+        let activeShootingStars = 0;
+        const MAX_SHOOTING_STARS = 3; // Maximum number of stars allowed at once
+        
+        // Start the recursive function to create shooting stars
+        createRandomShootingStar();
+        
+        // Begin additional shooting stars with staggered delays - but don't exceed our maximum
+        setTimeout(() => {
+            if (activeShootingStars < MAX_SHOOTING_STARS) createRandomShootingStar();
+        }, 2000 + Math.random() * 5000);
+        
+        setTimeout(() => {
+            if (activeShootingStars < MAX_SHOOTING_STARS) createRandomShootingStar();
+        }, 5000 + Math.random() * 8000);
+        
+        // Function to create and animate a single shooting star then recursively create another
+        function createRandomShootingStar() {
+            // Don't create more stars if we're at the maximum
+            if (activeShootingStars >= MAX_SHOOTING_STARS) {
+                // Try again after some delay
+                setTimeout(() => {
+                    createRandomShootingStar();
+                }, 3000 + Math.random() * 3000);
+                return;
+            }
             
-            // Random position (top 0-60% of screen)
-            const topPosition = Math.random() * 60;
-            star.style.top = `${topPosition}%`;
+            // Increment the active stars counter
+            activeShootingStars++;
             
-            // Random direction (left-to-right or right-to-left)
-            const direction = Math.random() > 0.5 ? 'right' : 'left';
+            // Direction: either left-to-right or right-to-left
+            const direction = Math.random() > 0.5 ? 'leftToRight' : 'rightToLeft';
             
-            // Random angle for diagonal movement (-30 to 30 degrees)
-            const angle = Math.random() * 60 - 30;
-            const radians = angle * Math.PI / 180; 
-            const verticalRatio = Math.tan(radians); // Vertical movement relative to horizontal
+            // Keep stars higher in the sky to start
+            // Base height is between 0% and 20% from the top
+            const baseHeight = Math.random() * 20;
             
-            // Set up the star
-            if (direction === 'right') {
-                // Moving right (left to right)
-                star.style.left = '-10px'; // Start off-screen left
-                star.classList.add('rightward');
-                star.style.setProperty('--vertical-ratio', verticalRatio);
-                star.style.setProperty('--angle', `${angle}deg`);
+            // Calculate the travel distance in the X direction (110% of screen width)
+            const xDistance = 110; // from -5 to 105 or vice versa
+            
+            // For 45 degree diagonal, height change should be similar to x-distance
+            // Add some randomness to the angle, between 35-55 degrees
+            const angleVariation = 0.8 + Math.random() * 0.4; // 0.8 to 1.2
+            const heightChange = xDistance * angleVariation; // For ~45 degree angle
+            
+            // Always go downward - removed upward diagonal option
+            // Calculate start and end heights
+            const startHeight = baseHeight;
+            const endHeight = startHeight + heightChange;
+            
+            // Ensure we don't go below a minimum height or above maximum
+            // This ensures stars don't start or end off-screen
+            const finalStartHeight = Math.min(Math.max(startHeight, 0), 40); // Start in top 40%
+            const finalEndHeight = Math.min(Math.max(endHeight, 0), 60); // End before bottom 40%
+            
+            // Calculate start and end coordinates based on direction
+            let startX, startY, endX, endY;
+            
+            if (direction === 'leftToRight') {
+                // Left to right, start off-screen left, end off-screen right
+                startX = -5;
+                startY = finalStartHeight;
+                endX = 105;
+                endY = finalEndHeight;
             } else {
-                // Moving left (right to left)
-                star.style.right = '-10px'; // Start off-screen right
-                star.classList.add('leftward');
-                // For left-moving stars, SAME vertical ratio (don't invert it)
-                star.style.setProperty('--vertical-ratio', verticalRatio);
-                // But we do need to invert the angle for the tail rotation
-                star.style.setProperty('--angle', `${-angle}deg`);
+                // Right to left, start off-screen right, end off-screen left
+                startX = 105;
+                startY = finalStartHeight;
+                endX = -5;
+                endY = finalEndHeight;
             }
             
-            // Choose a random pattern (early, middle, or late visibility)
-            const patterns = ['early', 'middle', 'late'];
-            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+            // Create the wrapper div that will contain the shooting star (now just a tail)
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('shooting-star-wrapper');
+            wrapper.style.position = 'absolute';
+            wrapper.style.left = `${startX}%`;
+            wrapper.style.top = `${startY}%`;
+            wrapper.style.width = '3px'; 
+            wrapper.style.height = '3px';
+            wrapper.style.opacity = 0;
+            wrapper.style.pointerEvents = 'none';
             
-            // Add the pattern class
-            star.classList.add(pattern);
+            // No longer need a separate starDot element
+            // Create only the tail - shooting stars look more realistic with just a tail
             
-            // Slightly faster animation duration (3-5 seconds)
-            const duration = Math.random() * 2 + 3;
-            star.style.animationDuration = `${duration}s`;
+            // Set random tail appearance
+            const tailLength = 40 + Math.random() * 40; // 40-80px
+            const tailWidth = 1 + Math.random() * 3; // 1-4px (slightly wider than before)
             
-            // Shorter random delay between appearances (8-15 seconds)
-            const delay = Math.random() * 7 + 8;
-            star.style.animationDelay = `${delay}s`;
+            // Calculate the angle of travel
+            const dx = endX - startX;
+            const dy = endY - startY;
+            const angleInRadians = Math.atan2(dy, dx);
+            const angleInDegrees = angleInRadians * 180 / Math.PI;
             
-            // Create tail effect with random length
-            const tailLength = Math.random() * 50 + 50;
-            star.style.setProperty('--tail-length', `${tailLength}px`);
+            // Create tail
+            const tail = document.createElement('div');
+            tail.style.position = 'absolute';
+            tail.style.height = `${tailWidth}px`;
+            tail.style.width = `${tailLength}px`;
+            tail.style.transformOrigin = 'left center'; // Rotate from the leading edge
             
-            // Add to container
-            container.appendChild(star);
-        }
-    }
-    
-    // Add CSS for dynamically created elements
-    function addDynamicStyles() {
-        const style = document.createElement('style');
-        style.textContent = `
-            .forest-element {
-                position: absolute;
-                bottom: 0;
-                background-color: #1e5731;
-                border-radius: 50% 50% 0 0;
+            // Make the tail slightly brighter at the leading edge
+            if (direction === 'leftToRight') {
+                // For left-to-right stars
+                tail.style.left = '0'; 
+                tail.style.top = '1.5px';
+                tail.style.transform = `rotate(${angleInDegrees}deg)`;
+                tail.style.background = 'linear-gradient(to left, rgba(255,255,255,0.9), transparent)';
+            } else {
+                // For right-to-left stars
+                tail.style.left = '0';
+                tail.style.top = '1.5px';
+                tail.style.transform = `rotate(${180 + angleInDegrees}deg)`;
+                tail.style.background = 'linear-gradient(to right, rgba(255,255,255,0.9), transparent)';
             }
             
-            .star {
-                position: absolute;
-                background-color: rgba(255, 255, 255, 0.8);
-                border-radius: 50%;
-                animation: twinkle linear infinite;
-                transform-origin: center;
-            }
+            wrapper.appendChild(tail);
+            container.appendChild(wrapper);
             
-            /* Twinkling animation - more subtle opacity and scale changes */
-            @keyframes twinkle {
-                0% {
-                    opacity: 0.7;
-                    transform: scale(0.9);
-                }
-                50% {
-                    opacity: 0.9;
-                    transform: scale(1.1);
-                }
-                100% {
-                    opacity: 0.7;
-                    transform: scale(0.9);
-                }
-            }
+            // Animation timing
+            const totalDuration = 1000 + Math.random() * 3000; // 1-4 seconds total
+            const fadeInTime = totalDuration * 0.1;
+            const fadeOutTime = totalDuration * 0.3;
+            const visibleTime = totalDuration - fadeInTime - fadeOutTime;
             
-            /* Shooting stars layer */
-            .shooting-stars-layer {
-                position: absolute;
-                width: 100%;
-                height: 70%;
-                top: 0;
-                left: 0;
-                pointer-events: none;
-                overflow: visible;
-            }
+            // Define the "danger zone" - when stars might approach mountains
+            // This is the point at which we'll start fading them out if they're too low
+            const dangerZoneProgress = 0.75; // At 75% of their journey
+            const safeHeightThreshold = 45; // Maximum % from top where stars can be fully visible
             
-            /* Random shooting stars - invisible by default */
-            .shooting-star {
-                position: absolute;
-                width: 4px;
-                height: 4px;
-                background-color: transparent; /* No visible head */
-                opacity: 0; /* Start invisible */
-            }
+            // Randomize maximum opacity and create fluctuation values
+            const maxOpacity = 0.5 + Math.random() * 0.5; // Random max opacity between 0.5-1.0
+            const fluctuationSpeed = 100 + Math.random() * 200; // How quickly opacity fluctuates
+            const fluctuationAmount = Math.random() * 0.2; // How much opacity fluctuates (0-0.2)
             
-            /* Animation for right-moving shooting stars */
-            .shooting-star.rightward {
-                animation-name: shootingStarRight;
-                animation-timing-function: linear;
-                animation-iteration-count: infinite;
-            }
+            // Calculate the distance and travel speed
+            const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            const speed = distance / totalDuration; // percent per millisecond
             
-            /* Animation for left-moving shooting stars */
-            .shooting-star.leftward {
-                animation-name: shootingStarLeft;
-                animation-timing-function: linear;
-                animation-iteration-count: infinite;
-            }
+            // Create animation with requestAnimationFrame
+            let startTime = null;
+            let opacity = 0;
             
-            /* Tail for left-moving stars */
-            .shooting-star.leftward::after {
-                content: '';
-                position: absolute;
-                top: 1px;
-                right: 0;
-                width: var(--tail-length, 100px);
-                height: 2px;
-                background: linear-gradient(to right, rgba(255, 255, 255, 0.7), transparent);
-                transform-origin: right center;
-                transform: rotate(var(--angle, 0deg));
-            }
-            
-            /* Tail for right-moving stars */
-            .shooting-star.rightward::after {
-                content: '';
-                position: absolute;
-                top: 1px;
-                left: 0;
-                width: var(--tail-length, 100px);
-                height: 2px;
-                background: linear-gradient(to left, rgba(255, 255, 255, 0.7), transparent);
-                transform-origin: left center;
-                transform: rotate(var(--angle, 0deg));
-            }
-            
-            /* Visibility timing classes */
-            .shooting-star.early { animation-delay: 0s; }
-            .shooting-star.middle { animation-delay: 2s; }
-            .shooting-star.late { animation-delay: 4s; }
-            
-            /* Right-moving star animation */
-            @keyframes shootingStarRight {
-                0% {
-                    transform: translate(0, 0);
-                    opacity: 0;
-                }
-                5% {
-                    transform: translate(10vw, calc(10vw * var(--vertical-ratio, 0)));
-                    opacity: 0;
-                }
-                10% {
-                    transform: translate(20vw, calc(20vw * var(--vertical-ratio, 0)));
-                    opacity: 0.7;
-                }
-                15% {
-                    transform: translate(30vw, calc(30vw * var(--vertical-ratio, 0)));
-                    opacity: 1;
-                }
-                40% {
-                    transform: translate(80vw, calc(80vw * var(--vertical-ratio, 0)));
-                    opacity: 1;
-                }
-                45% {
-                    transform: translate(90vw, calc(90vw * var(--vertical-ratio, 0)));
-                    opacity: 0.7;
-                }
-                50% {
-                    transform: translate(100vw, calc(100vw * var(--vertical-ratio, 0)));
-                    opacity: 0;
-                }
-                100% {
-                    transform: translate(120vw, calc(120vw * var(--vertical-ratio, 0)));
-                    opacity: 0;
-                }
-            }
-            
-            /* Left-moving star animation */
-            @keyframes shootingStarLeft {
-                0% {
-                    transform: translate(0, 0);
-                    opacity: 0;
-                }
-                5% {
-                    /* For left-moving stars, the X is negative but vertical motion should match direction */
-                    transform: translate(-10vw, calc(10vw * var(--vertical-ratio, 0)));
-                    opacity: 0;
-                }
-                10% {
-                    transform: translate(-20vw, calc(20vw * var(--vertical-ratio, 0)));
-                    opacity: 0.7;
-                }
-                15% {
-                    transform: translate(-30vw, calc(30vw * var(--vertical-ratio, 0)));
-                    opacity: 1;
-                }
-                40% {
-                    transform: translate(-80vw, calc(80vw * var(--vertical-ratio, 0)));
-                    opacity: 1;
-                }
-                45% {
-                    transform: translate(-90vw, calc(90vw * var(--vertical-ratio, 0)));
-                    opacity: 0.7;
-                }
-                50% {
-                    transform: translate(-100vw, calc(100vw * var(--vertical-ratio, 0)));
-                    opacity: 0;
-                }
-                100% {
-                    transform: translate(-120vw, calc(120vw * var(--vertical-ratio, 0)));
-                    opacity: 0;
-                }
-            }
-            
-            /* Constrain elements to the viewport */
-            @media (max-width: 768px) {
-                .forest-element {
-                    max-height: 30vh;
-                }
+            function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
                 
-                .star {
-                    max-width: 2px;
-                    max-height: 2px;
+                if (elapsed <= totalDuration) {
+                    // Calculate position based on elapsed time
+                    const progress = elapsed / totalDuration;
+                    const currentX = startX + (endX - startX) * progress;
+                    const currentY = startY + (endY - startY) * progress;
+                    
+                    // Update position
+                    wrapper.style.left = `${currentX}%`;
+                    wrapper.style.top = `${currentY}%`;
+                    
+                    // Handle opacity changes with randomized fluctuation
+                    if (elapsed <= fadeInTime) {
+                        // Fade in
+                        opacity = (elapsed / fadeInTime) * maxOpacity;
+                    } else if (elapsed >= totalDuration - fadeOutTime) {
+                        // Fade out
+                        opacity = maxOpacity * (1 - (elapsed - (totalDuration - fadeOutTime)) / fadeOutTime);
+                    } else {
+                        // Full visibility with random fluctuations
+                        // Use sine wave to create natural fluctuation
+                        const fluctuation = Math.sin(elapsed / fluctuationSpeed) * fluctuationAmount;
+                        opacity = Math.max(0.1, Math.min(1, maxOpacity + fluctuation));
+                        
+                        // Extra fade-out logic for when stars get too low or too close to mountains
+                        if (progress > dangerZoneProgress) {
+                            // Calculate how far into the danger zone we are (0-1)
+                            const dangerProgress = (progress - dangerZoneProgress) / (1 - dangerZoneProgress);
+                            
+                            // If the star is below our safe threshold, start fading it out
+                            const heightPercent = currentY;
+                            if (heightPercent > safeHeightThreshold) {
+                                // Calculate how much to reduce opacity based on height
+                                const heightDanger = (heightPercent - safeHeightThreshold) / (100 - safeHeightThreshold);
+                                // The lower the star and the further along, the more we fade it
+                                const fadeReduction = dangerProgress * heightDanger * maxOpacity;
+                                opacity = Math.max(0, opacity - fadeReduction);
+                            }
+                        }
+                    }
+                    
+                    wrapper.style.opacity = opacity;
+                    
+                    // Also randomly adjust the tail brightness
+                    if (Math.random() < 0.05) { // 5% chance per frame to adjust tail
+                        const tailBrightness = Math.max(0.3, opacity * (0.8 + Math.random() * 0.4));
+                        if (direction === 'leftToRight') {
+                            tail.style.background = `linear-gradient(to left, rgba(255,255,255,${tailBrightness}), transparent)`;
+                        } else {
+                            tail.style.background = `linear-gradient(to right, rgba(255,255,255,${tailBrightness}), transparent)`;
+                        }
+                    }
+                    
+                    requestAnimationFrame(animate);
+                } else {
+                    // Animation complete, remove the star
+                    container.removeChild(wrapper);
+                    
+                    // Decrement the active stars counter
+                    activeShootingStars--;
+                    
+                    // Schedule next star with random delay
+                    const nextDelay = 5000 + Math.random() * 10000; // 5-13 seconds
+                    setTimeout(createRandomShootingStar, nextDelay);
                 }
             }
-        `;
-        document.head.appendChild(style);
+            
+            // Start the animation in the next frame
+            requestAnimationFrame(animate);
+            
+            // Create potential additional simultaneous star with low probability
+            // But only if we're not already at the maximum
+            if (Math.random() < 0.15 && activeShootingStars < MAX_SHOOTING_STARS) { // 15% chance of "meteor shower" effect
+                setTimeout(() => {
+                    createRandomShootingStar();
+                }, Math.random() * 1000);
+            }
+        }
     }
     
     // Start the experience

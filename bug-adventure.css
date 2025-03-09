@@ -499,3 +499,48 @@ body {
     bottom: 0;
     transform: translateZ(-3px) scale(1.4);
 }
+
+/* Forest elements */
+.forest-element {
+    position: absolute;
+    bottom: 0;
+    background-color: #1e5731;
+    border-radius: 50% 50% 0 0;
+}
+
+/* Star styling */
+.star {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: twinkle linear infinite;
+    transform-origin: center;
+}
+
+/* Twinkling animation - more subtle opacity and scale changes */
+@keyframes twinkle {
+    0% {
+        opacity: 0.7;
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 0.9;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 0.7;
+        transform: scale(0.9);
+    }
+}
+
+/* Constrain elements to the viewport */
+@media (max-width: 768px) {
+    .forest-element {
+        max-height: 30vh;
+    }
+    
+    .star {
+        max-width: 2px;
+        max-height: 2px;
+    }
+}

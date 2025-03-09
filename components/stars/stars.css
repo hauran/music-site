@@ -38,7 +38,7 @@
         20px 10px, 
         50px 50px;
     
-    z-index: 2;
+    z-index: 2; /* Keeping z-index at 2, which is lower than moon-layer (5) and crescent-moon (6) */
     opacity: 1; /* Increased opacity from 0.8 to 1 for full visibility */
     animation: starsBrightening 300s linear forwards;
     will-change: opacity; /* Only animate opacity, nothing else */
@@ -53,6 +53,7 @@
     transform-origin: center;
     /* Add a subtle glow effect */
     box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+    z-index: 2; /* Ensure stars stay behind the moon layer (z-index: 5) */
 }
 
 /* Twinkling animation - more pronounced opacity and scale changes */

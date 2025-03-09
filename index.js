@@ -5,6 +5,7 @@ import ShootingStarsComponent from './components/shooting-stars/shooting-stars.j
 document.addEventListener('DOMContentLoaded', () => {
     // scene elements
     const sceneContainer = document.querySelector('.scene-container');
+    const loadingOverlay = document.querySelector('.loading-overlay');
     
     // Component instances
     let starsComponent;
@@ -31,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize
     function init() {
+        // Keep the loading overlay visible while initializing
+        
         // Set up event listeners
         window.addEventListener('resize', handleResize);
         
@@ -50,28 +53,39 @@ document.addEventListener('DOMContentLoaded', () => {
         // Apply mountain colors from CSS variables
         updateMountainColors();
         
-        // Debug log to check if mountain color variables are being read correctly
-        console.log("Mountain colors:", {
-            far: getComputedStyle(document.documentElement).getPropertyValue('--mountains-far-color').trim(),
-            mid: getComputedStyle(document.documentElement).getPropertyValue('--mountains-mid-color').trim(),
-            near: getComputedStyle(document.documentElement).getPropertyValue('--mountains-near-color').trim()
-        });
-
-        // Start sunset and moon rise sequence
-        setTimeout(() => {
-            // Trigger night sky transition
-            const skyLayer = document.querySelector('.sky-layer');
-            skyLayer.classList.add('night');
-            
-            // Trigger moon rise animation
-            const crescentMoon = document.querySelector('.crescent-moon');
-            crescentMoon.classList.add('rise');
-        }, 1000);
+        // After everything is initialized, reveal the scene
+        window.addEventListener('load', revealScene);
+        
+        // If all assets are already loaded, reveal scene after a short delay
+        setTimeout(revealScene, 500);
         
         // Add a periodic check to ensure mountains remain visible
         if (window.innerWidth <= 768) {
             setInterval(ensureMountainsVisible, 2000);
         }
+    }
+    
+    // Function to reveal the scene and hide the loading overlay
+    function revealScene() {
+        // Only do this once
+        if (sceneContainer.classList.contains('visible')) {
+            return;
+        }
+        
+        // Trigger night sky transition
+        const skyLayer = document.querySelector('.sky-layer');
+        skyLayer.classList.add('night');
+        
+        // Trigger moon rise animation
+        const crescentMoon = document.querySelector('.crescent-moon');
+        crescentMoon.classList.add('rise');
+        
+        // Hide loading overlay and show scene
+        loadingOverlay.classList.add('hidden');
+        sceneContainer.classList.add('visible');
+        
+        // Remove the event listener to avoid duplicate calls
+        window.removeEventListener('load', revealScene);
     }
     
     // Function to update mountain SVG colors from CSS variables

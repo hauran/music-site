@@ -1,0 +1,141 @@
+/* Moon Component Styles */
+
+/* CSS Variables for customization */
+:root {
+    /* Animation durations */
+    --moon-arc-duration: 180s;
+    --moon-arc-delay: 5s;
+    
+    /* Moon color properties */
+    --moon-color: #e6e6fa;
+    --moon-glow-color: rgba(230, 230, 250, 0.4);
+    --moon-shadow-color: rgba(0, 0, 14, 0.8);
+    
+    /* Moon size properties */
+    --moon-size: 70px;
+    --moon-glow-size: 30px;
+    
+    /* Moon arc path properties */
+    --moon-start-left: 5%;      /* Starting position (left side) */
+    --moon-peak-left: 50%;      /* Middle of arc (center) */
+    --moon-end-left: 95%;       /* Ending position (right side) */
+    
+    --moon-start-top: 80%;      /* Start near horizon */
+    --moon-peak-top: 15%;       /* Peak of arc (high in sky) */
+    --moon-end-top: 80%;        /* End near horizon */
+    
+    /* Moon visual effects */
+    --moon-blur: 2px;
+    --moon-rotate: -30deg;
+    
+    /* Mobile specific variables */
+    --moon-size-mobile: 60px;
+    --moon-glow-size-mobile: 20px;
+    --moon-start-left-mobile: 0%;
+    --moon-peak-left-mobile: 50%;
+    --moon-end-left-mobile: 100%;
+    --moon-start-top-mobile: 70%;
+    --moon-peak-top-mobile: 20%;
+    --moon-end-top-mobile: 70%;
+}
+
+/* Moon layer z-index */
+.moon-layer { 
+    z-index: 5; /* Increased from 3 to 5 to ensure it's above the stars */
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+/* The crescent moon */
+.crescent-moon {
+    position: absolute;
+    width: var(--moon-size);
+    height: var(--moon-size);
+    border-radius: 50%;
+    background-color: transparent;
+    left: var(--moon-start-left);
+    top: var(--moon-start-top);
+    opacity: 0;
+    overflow: visible;
+    transform-origin: center;
+    will-change: transform, opacity, left, top;
+    /* Create crescent shape with box-shadow for glow */
+    box-shadow: inset -10px -3px 0px 0px var(--moon-color),
+                0 0 var(--moon-glow-size) var(--moon-glow-color);
+    transform: rotate(var(--moon-rotate));
+    filter: blur(var(--moon-blur));
+    z-index: 6; /* Increased from 4 to 6 to ensure it's above the stars */
+}
+
+/* Moon arc animation - starts when the .rise class is added */
+.crescent-moon.rise {
+    animation: moonArc var(--moon-arc-duration) var(--moon-arc-delay) ease-in-out forwards;
+}
+
+/* The arc animation keyframes */
+@keyframes moonArc {
+    0% {
+        opacity: 0.2;
+        left: var(--moon-start-left);
+        top: var(--moon-start-top);
+    }
+    5% {
+        opacity: 0.3;
+    }
+    10% {
+        opacity: 0.5;
+    }
+    /* First quarter - rising from horizon to mid-sky */
+    25% {
+        opacity: 0.7;
+        left: calc(var(--moon-start-left) + ((var(--moon-peak-left) - var(--moon-start-left)) / 2));
+        top: calc(var(--moon-start-top) + ((var(--moon-peak-top) - var(--moon-start-top)) / 2));
+    }
+    /* Mid-point - peak of the arc */
+    50%, 100% {
+        opacity: 1;
+        left: var(--moon-peak-left);
+        top: var(--moon-peak-top);
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .crescent-moon {
+        width: var(--moon-size-mobile);
+        height: var(--moon-size-mobile);
+        left: var(--moon-start-left-mobile);
+        top: var(--moon-start-top-mobile);
+        /* Adjust crescent shape for mobile */
+        box-shadow: inset -8px -2px 0px 0px var(--moon-color),
+                    0 0 var(--moon-glow-size-mobile) var(--moon-glow-color);
+        filter: blur(var(--moon-blur));
+    }
+    
+    @keyframes moonArc {
+        0% {
+            opacity: 0.2;
+            left: var(--moon-start-left-mobile);
+            top: var(--moon-start-top-mobile);
+        }
+        5% {
+            opacity: 0.5;
+        }
+        /* First quarter - rising from horizon to mid-sky */
+        25% {
+            opacity: 0.8;
+            left: calc(var(--moon-start-left-mobile) + ((var(--moon-peak-left-mobile) - var(--moon-start-left-mobile)) / 2));
+            top: calc(var(--moon-start-top-mobile) + ((var(--moon-peak-top-mobile) - var(--moon-start-top-mobile)) / 2));
+        }
+        /* Mid-point - peak of the arc */
+        50%, 100% {
+            opacity: 1;
+            left: var(--moon-peak-left-mobile);
+            top: var(--moon-peak-top-mobile);
+        }
+    }
+} 

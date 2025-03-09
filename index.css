@@ -15,6 +15,41 @@ body {
     position: fixed; /* Ensure no bouncing/scrolling on mobile */
 }
 
+/* Loading overlay styles */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: 9999; /* Ensure it's above everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-out; /* Smooth fade-out transition */
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Hide the loading overlay when the scene is ready */
+.loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
 /* parent of all scene elements */
 .scene-container {
     position: absolute;
@@ -23,6 +58,14 @@ body {
     top: 0;
     left: 0;
     overflow: hidden;
+    /* Initially hidden until JS loads everything */
+    opacity: 0;
+    transition: opacity 0.5s ease-in; /* Smooth fade-in transition */
+}
+
+/* Scene container visible class added by JS when ready */
+.scene-container.visible {
+    opacity: 1;
 }
 
 /* Scene with proper aspect ratio */

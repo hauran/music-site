@@ -1,0 +1,63 @@
+/* Sun Component Styles */
+
+/* Sun layer z-index */
+.sun-layer { 
+    z-index: 3; 
+}
+
+/* Sun element with animation */
+.sun-layer::after {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: #ffe69c;
+    border-radius: 50%;
+    left: 55%;
+    top: 30%; 
+    box-shadow: 0 0 80px 20px rgba(255, 207, 124, 0.8);
+    filter: blur(4px);
+    animation: sunSet 180s linear forwards;
+    will-change: opacity, background, box-shadow, top;
+    z-index: 4; /* Ensure sun is behind mountains but in front of sky */
+}
+
+/* Sun fading animation - smoother transitions */
+@keyframes sunSet {
+    0% {
+        opacity: 1;
+        background: #ffe69c;
+        box-shadow: 0 0 80px 20px rgba(255, 207, 124, 0.8);
+        top: 30%;
+    }
+    20% {
+        opacity: 0.9;
+        background: #ffe09a;
+        box-shadow: 0 0 75px 18px rgba(250, 202, 119, 0.75);
+        top: 45%;
+    }
+    40% {
+        opacity: 0.8;
+        background: #ffd68c;
+        box-shadow: 0 0 70px 15px rgba(245, 197, 114, 0.7);
+        top: 60%;
+    }
+    60% {
+        opacity: 0.6;
+        background: #ffce84;
+        box-shadow: 0 0 65px 12px rgba(240, 192, 109, 0.6);
+        top: 68%;
+    }
+    80% {
+        opacity: 0.4;
+        background: #ffc67c;
+        box-shadow: 0 0 50px 8px rgba(235, 187, 104, 0.4);
+        top: 73%;
+    }
+    100% {
+        opacity: 0.25;
+        background: #ffb66c;
+        box-shadow: 0 0 40px 5px rgba(225, 177, 94, 0.3);
+        top: 75%;
+    }
+} 

@@ -1,0 +1,41 @@
+/* Mountains Component Styles */
+
+/* Z-index values for layer stacking */
+.mountains-far-layer { z-index: 6; }
+.mountains-far-mid-layer { z-index: 7; }
+.mountains-near-layer { z-index: 8; }
+.mountains-mid-near-layer { z-index: 9; }
+
+/* Far mountains */
+.mountains-far-layer {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,220 L100,190 L200,220 L240,205 L300,230 L380,165 L450,190 L520,140 L600,190 L700,230 L750,160 L820,190 L900,220 L1000,180 L1080,200 L1150,140 L1200,170 L1200,300 Z" fill="%23534f55"/></svg>');
+    background-size: 120% 100%;
+    opacity: 1;
+    transform: translateX(-12%);
+    filter: blur(3px);
+}
+
+/* Far-mid mountain layer */
+.mountains-far-mid-layer {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    top: -10%;
+    left: -10%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,235 L70,215 L130,235 L180,205 L220,235 L290,195 L350,215 L430,185 L490,215 L550,195 L620,215 L720,175 L820,205 L900,185 L980,215 L1050,195 L1120,215 L1200,195 L1200,300 Z" fill="%23635c5f"/></svg>');
+    background-size: 130% 100%;
+    background-repeat: repeat-x;
+    transform: translateX(5%);
+    filter: blur(2.5px);
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+}
+
+/* Near mountains layer */
+.mountains-near-layer {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,230 L45,220 L65,225 L80,210 L95,215 L120,220 L150,230 L180,225 L215,210 L250,190 L270,200 L300,230 L330,220 L350,215 L380,210 L410,220 L450,230 L480,225 L510,215 L550,180 L590,190 L620,200 L650,210 L690,200 L715,190 L780,180 L810,190 L850,215 L900,200 L935,185 L970,175 L1000,190 L1050,210 L1090,200 L1150,190 L1200,210 L1200,300 Z" fill="%23736b67"/></svg>');
+    background-size: 130% 100%;
+    bottom: 0;
+    transform: translateX(18%);
+    filter: blur(1.5px);
+} 

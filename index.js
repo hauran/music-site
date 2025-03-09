@@ -1,6 +1,6 @@
 // Import components
-import StarsComponent from './components/stars.js';
-import ShootingStarsComponent from './components/shooting-stars.js';
+import StarsComponent from './components/stars/stars.js';
+import ShootingStarsComponent from './components/shooting-stars/shooting-stars.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // scene elements

@@ -19,12 +19,12 @@
     --mountains-near-blur: 1.5px;
     
     /* Positioning */
-    --mountains-far-transform: translateX(20%);
+    --mountains-far-transform: translateX(17%);
     --mountains-mid-transform: translateX(10%);
     --mountains-near-transform: translateX(0%);
     
     /* Background sizing */
-    --mountains-far-bg-size: 130% 109%;
+    --mountains-far-bg-size: 120% 109%;
     --mountains-mid-bg-size: 130% 115%;
     --mountains-near-bg-size: 135% 85%;
     

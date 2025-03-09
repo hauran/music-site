@@ -49,11 +49,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Apply mountain colors from CSS variables
         updateMountainColors();
+        
+        // Debug log to check if mountain color variables are being read correctly
+        console.log("Mountain colors:", {
+            far: getComputedStyle(document.documentElement).getPropertyValue('--mountains-far-color').trim(),
+            mid: getComputedStyle(document.documentElement).getPropertyValue('--mountains-mid-color').trim(),
+            near: getComputedStyle(document.documentElement).getPropertyValue('--mountains-near-color').trim()
+        });
 
-        // start sunset
+        // Start sunset and moon rise sequence
         setTimeout(() => {
+            // Trigger night sky transition
             const skyLayer = document.querySelector('.sky-layer');
             skyLayer.classList.add('night');
+            
+            // Trigger moon rise animation
+            const crescentMoon = document.querySelector('.crescent-moon');
+            crescentMoon.classList.add('rise');
         }, 1000);
         
         // Add a periodic check to ensure mountains remain visible
@@ -66,19 +78,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateMountainColors() {
         const farColor = getComputedStyle(document.documentElement)
             .getPropertyValue('--mountains-far-color').trim();
-        const farMidColor = getComputedStyle(document.documentElement)
+        const midColor = getComputedStyle(document.documentElement)
             .getPropertyValue('--mountains-mid-color').trim();
         const nearColor = getComputedStyle(document.documentElement)
             .getPropertyValue('--mountains-near-color').trim();
             
         // Create SVG strings with the colors from CSS variables
         const farSvg = createMountainSvg('far', farColor);
-        const farMidSvg = createMountainSvg('mid', farMidColor);
+        const midSvg = createMountainSvg('mid', midColor);
         const nearSvg = createMountainSvg('near', nearColor);
         
         // Apply the SVGs to the mountain layers
         document.querySelector('.mountains-far-layer').style.backgroundImage = `url('data:image/svg+xml;utf8,${farSvg}')`;
-        document.querySelector('.mountains-mid-layer').style.backgroundImage = `url('data:image/svg+xml;utf8,${farMidSvg}')`;
+        document.querySelector('.mountains-mid-layer').style.backgroundImage = `url('data:image/svg+xml;utf8,${midSvg}')`;
         document.querySelector('.mountains-near-layer').style.backgroundImage = `url('data:image/svg+xml;utf8,${nearSvg}')`;
     }
     
@@ -107,6 +119,26 @@ document.addEventListener('DOMContentLoaded', () => {
         positionElementsForViewport();
         // Update mountain colors (in case CSS variables changed)
         updateMountainColors();
+        
+        // Handle moon responsive adjustments
+        adjustMoonForViewport();
+    }
+    
+    // Function to adjust moon for different viewport sizes
+    function adjustMoonForViewport() {
+        const isMobile = window.innerWidth <= 768;
+        const crescentMoon = document.querySelector('.crescent-moon');
+        
+        if (crescentMoon) {
+            // Apply appropriate styles based on viewport
+            if (isMobile) {
+                crescentMoon.style.width = computedStyle.getPropertyValue('--moon-size-mobile');
+                crescentMoon.style.height = computedStyle.getPropertyValue('--moon-size-mobile');
+            } else {
+                crescentMoon.style.width = computedStyle.getPropertyValue('--moon-size');
+                crescentMoon.style.height = computedStyle.getPropertyValue('--moon-size');
+            }
+        }
     }
     
     // Position elements appropriately for viewport
@@ -146,6 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     void layer.offsetHeight;
                 }
             });
+            
+            // Adjust the moon for mobile viewport
+            adjustMoonForViewport();
+            
         } else {
             // Reset any mobile-specific positioning
             sceneLayers.forEach(layer => {
@@ -158,6 +194,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 layer.style.backgroundPosition = '';
                 layer.style.transform = '';
             });
+            
+            // Adjust the moon for desktop viewport
+            adjustMoonForViewport();
         }
         
         // Force a reflow to ensure changes are applied
@@ -186,6 +225,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Update mountain colors in case they were reset
             updateMountainColors();
+            
+            // Also ensure moon is properly positioned
+            adjustMoonForViewport();
         }
     }
     

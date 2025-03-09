@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Initial positioning
         positionElementsForViewport();
+        
+        // Start the experience to trigger the night sky transition
+        startExperience();
     }
     
     // Prevent scroll on mobile
@@ -341,19 +344,28 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Start the experience
     function startExperience() {
-        // Show controls info briefly
-        controlsInfo.style.opacity = 1;
-        
-        // Hide controls info after a few seconds
-        setTimeout(() => {
-            controlsInfo.style.opacity = 0;
-        }, 4000);
+        console.log('Starting experience...');
         
         // Trigger sky transition to night after a short delay
         setTimeout(() => {
             const skyLayer = document.querySelector('.sky-layer');
             if (skyLayer) {
+                console.log('Adding night class to sky-layer');
                 skyLayer.classList.add('night');
+                
+                // Log the current state of the sky elements
+                const skyDay = document.querySelector('.sky-day');
+                const skyNight = document.querySelector('.sky-night');
+                
+                if (skyDay && skyNight) {
+                    console.log('Sky day/night elements found');
+                    console.log('Sky day style:', window.getComputedStyle(skyDay).height);
+                    console.log('Sky night style:', window.getComputedStyle(skyNight).height);
+                } else {
+                    console.log('Sky day/night elements not found');
+                }
+            } else {
+                console.log('Sky layer not found');
             }
         }, 1000); // Start transition after 1 second
     }

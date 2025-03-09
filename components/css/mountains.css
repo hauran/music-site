@@ -4,72 +4,73 @@
 :root {
     /* Z-index values */
     --mountains-far-z-index: 6;
-    --mountains-far-mid-z-index: 7;
+    --mountains-mid-z-index: 7;
     --mountains-near-z-index: 8;
     --mountains-mid-near-z-index: 9;
     
     /* Colors */
-    --mountains-far-color: #9295a1;
-    --mountains-far-mid-color: #737782;
-    --mountains-near-color: #484a55;
+    --mountains-far-color: #8daae1; 
+    --mountains-mid-color: #6c81a9; 
+    --mountains-near-color: #3a465c; 
     
     /* Blur levels */
     --mountains-far-blur: 5px;
-    --mountains-far-mid-blur: 3.5px;
+    --mountains-mid-blur: 3.5px;
     --mountains-near-blur: 1.5px;
     
     /* Positioning */
     --mountains-far-transform: translateX(20%);
-    --mountains-far-mid-transform: translateX(10%);
+    --mountains-mid-transform: translateX(10%);
     --mountains-near-transform: translateX(0%);
     
     /* Background sizing */
     --mountains-far-bg-size: 130% 109%;
-    --mountains-far-mid-bg-size: 130% 115%;
-    --mountains-near-bg-size: 130% 90%;
+    --mountains-mid-bg-size: 130% 115%;
+    --mountains-near-bg-size: 135% 85%;
     
     /* Mobile specific */
     --mountains-far-mobile-bottom: 16%;
-    --mountains-far-mid-mobile-bottom: 14%;
+    --mountains-mid-mobile-bottom: 14%;
     --mountains-near-mobile-bottom: 11%;
     --mountains-far-mobile-transform: translateX(0%);
-    --mountains-far-mid-mobile-transform: translateX(-10%);
+    --mountains-mid-mobile-transform: translateX(-10%);
     --mountains-near-mobile-transform: translateX(5%);
 }
 
 /* Z-index values for layer stacking */
 .mountains-far-layer { z-index: var(--mountains-far-z-index); }
-.mountains-far-mid-layer { z-index: var(--mountains-far-mid-z-index); }
+.mountains-mid-layer { z-index: var(--mountains-mid-z-index); }
 .mountains-near-layer { z-index: var(--mountains-near-z-index); }
 .mountains-mid-near-layer { z-index: var(--mountains-mid-near-z-index); }
 
 /* Far mountains - lightest color */
 .mountains-far-layer {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,220 L100,190 L200,220 L240,205 L300,230 L380,165 L450,190 L520,140 L600,190 L700,230 L750,160 L820,190 L900,220 L1000,180 L1080,200 L1150,140 L1200,170 L1200,300 Z" fill="%239295a1"/></svg>');
+    /* Convert hex to URL-encoded hex for SVG (# becomes %23) */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,220 L100,190 L200,220 L240,205 L300,230 L380,165 L450,190 L520,140 L600,190 L700,230 L750,160 L820,190 L900,220 L1000,180 L1080,200 L1150,140 L1200,170 L1200,300 Z" fill="%23e0a080"/></svg>');
     background-size: var(--mountains-far-bg-size);
     opacity: 1;
     transform: var(--mountains-far-transform);
     filter: blur(var(--mountains-far-blur));
 }
 
-/* Far-mid mountain layer - medium-light color */
-.mountains-far-mid-layer {
+/* mid mountain layer - medium-light color */
+.mountains-mid-layer {
     position: absolute;
     width: 120%;
     height: 120%;
     top: -10%;
     left: -10%;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,235 L70,215 L130,235 L180,205 L220,235 L290,195 L350,215 L430,185 L490,215 L550,195 L620,215 L720,175 L820,205 L900,185 L980,215 L1050,195 L1120,215 L1200,195 L1200,300 Z" fill="%23737782"/></svg>');
-    background-size: var(--mountains-far-mid-bg-size);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,235 L70,215 L130,235 L180,205 L220,235 L290,195 L350,215 L430,185 L490,215 L550,195 L620,215 L720,175 L820,205 L900,185 L980,215 L1050,195 L1120,215 L1200,195 L1200,300 Z" fill="%23c4725a"/></svg>');
+    background-size: var(--mountains-mid-bg-size);
     background-repeat: repeat-x;
-    transform: var(--mountains-far-mid-transform);
-    filter: blur(var(--mountains-far-mid-blur));
+    transform: var(--mountains-mid-transform);
+    filter: blur(var(--mountains-mid-blur));
     will-change: auto;
 }
 
 /* Near mountains layer - darkest color */
 .mountains-near-layer {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,230 L45,220 L65,225 L80,210 L95,215 L120,220 L150,230 L180,225 L215,210 L250,190 L270,200 L300,230 L330,220 L350,215 L380,210 L410,220 L450,230 L480,225 L510,215 L550,180 L590,190 L620,200 L650,210 L690,200 L715,190 L780,180 L810,190 L850,215 L900,200 L935,185 L970,175 L1000,190 L1050,210 L1090,200 L1150,190 L1200,210 L1200,300 Z" fill="%23484a55"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,230 L45,220 L65,225 L80,210 L95,215 L120,220 L150,230 L180,225 L215,210 L250,190 L270,200 L300,230 L330,220 L350,215 L380,210 L410,220 L450,230 L480,225 L510,215 L550,180 L590,190 L620,200 L650,210 L690,200 L715,190 L780,180 L810,190 L850,215 L900,200 L935,185 L970,175 L1000,190 L1050,210 L1090,200 L1150,190 L1200,210 L1200,300 Z" fill="%238c4f3a"/></svg>');
     background-size: var(--mountains-near-bg-size);
     bottom: 0;
     transform: var(--mountains-near-transform);
@@ -79,7 +80,7 @@
 /* Mobile adjustments */
 @media (max-width: 768px) {
     .mountains-far-layer, 
-    .mountains-far-mid-layer, 
+    .mountains-mid-layer, 
     .mountains-near-layer {
         background-size: 150% 120%;
         background-position: center bottom;
@@ -98,24 +99,24 @@
     .mountains-far-layer {
         transform: var(--mountains-far-mobile-transform) !important;
         bottom: var(--mountains-far-mobile-bottom) !important; /* Slight stagger for depth */
-        /* Maintain the light color */
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,220 L100,190 L200,220 L240,205 L300,230 L380,165 L450,190 L520,140 L600,190 L700,230 L750,160 L820,190 L900,220 L1000,180 L1080,200 L1150,140 L1200,170 L1200,300 Z" fill="%239295a1"/></svg>');
+        /* Maintain the same color using the CSS variable */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,220 L100,190 L200,220 L240,205 L300,230 L380,165 L450,190 L520,140 L600,190 L700,230 L750,160 L820,190 L900,220 L1000,180 L1080,200 L1150,140 L1200,170 L1200,300 Z" fill="%23e0a080"/></svg>');
         filter: blur(var(--mountains-far-blur)) !important; /* Match the desktop blur */
     }
     
-    .mountains-far-mid-layer {
-        transform: var(--mountains-far-mid-mobile-transform) !important;
-        bottom: var(--mountains-far-mid-mobile-bottom) !important; /* Slight stagger for depth */
-        /* Maintain the medium-light color */
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,235 L70,215 L130,235 L180,205 L220,235 L290,195 L350,215 L430,185 L490,215 L550,195 L620,215 L720,175 L820,205 L900,185 L980,215 L1050,195 L1120,215 L1200,195 L1200,300 Z" fill="%23737782"/></svg>');
-        filter: blur(var(--mountains-far-mid-blur)) !important; /* Match the desktop blur */
+    .mountains-mid-layer {
+        transform: var(--mountains-mid-mobile-transform) !important;
+        bottom: var(--mountains-mid-mobile-bottom) !important; /* Slight stagger for depth */
+        /* Maintain the same color using the CSS variable */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,235 L70,215 L130,235 L180,205 L220,235 L290,195 L350,215 L430,185 L490,215 L550,195 L620,215 L720,175 L820,205 L900,185 L980,215 L1050,195 L1120,215 L1200,195 L1200,300 Z" fill="%23c4725a"/></svg>');
+        filter: blur(var(--mountains-mid-blur)) !important; /* Match the desktop blur */
     }
     
     .mountains-near-layer {
         transform: var(--mountains-near-mobile-transform) !important;
         bottom: var(--mountains-near-mobile-bottom) !important; /* Slight stagger for depth */
-        /* Maintain the dark color */
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,230 L45,220 L65,225 L80,210 L95,215 L120,220 L150,230 L180,225 L215,210 L250,190 L270,200 L300,230 L330,220 L350,215 L380,210 L410,220 L450,230 L480,225 L510,215 L550,180 L590,190 L620,200 L650,210 L690,200 L715,190 L780,180 L810,190 L850,215 L900,200 L935,185 L970,175 L1000,190 L1050,210 L1090,200 L1150,190 L1200,210 L1200,300 Z" fill="%23484a55"/></svg>');
+        /* Maintain the same color using the CSS variable */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0,300 L0,230 L45,220 L65,225 L80,210 L95,215 L120,220 L150,230 L180,225 L215,210 L250,190 L270,200 L300,230 L330,220 L350,215 L380,210 L410,220 L450,230 L480,225 L510,215 L550,180 L590,190 L620,200 L650,210 L690,200 L715,190 L780,180 L810,190 L850,215 L900,200 L935,185 L970,175 L1000,190 L1050,210 L1090,200 L1150,190 L1200,210 L1200,300 Z" fill="%238c4f3a"/></svg>');
         filter: blur(var(--mountains-near-blur)) !important; /* Match the desktop blur */
     }
 } 

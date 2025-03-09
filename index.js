@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
             bottom: computedStyle.getPropertyValue('--mountains-far-mobile-bottom').trim(),
             transform: computedStyle.getPropertyValue('--mountains-far-mobile-transform').trim()
         },
-        'mountains-far-mid-layer': {
-            bottom: computedStyle.getPropertyValue('--mountains-far-mid-mobile-bottom').trim(),
-            transform: computedStyle.getPropertyValue('--mountains-far-mid-mobile-transform').trim()
+        'mountains-mid-layer': {
+            bottom: computedStyle.getPropertyValue('--mountains-mid-mobile-bottom').trim(),
+            transform: computedStyle.getPropertyValue('--mountains-mid-mobile-transform').trim()
         },
         'mountains-near-layer': {
             bottom: computedStyle.getPropertyValue('--mountains-near-mobile-bottom').trim(),
@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initial positioning
         positionElementsForViewport();
 
+        // Apply mountain colors from CSS variables
+        updateMountainColors();
+
         // start sunset
         setTimeout(() => {
             const skyLayer = document.querySelector('.sky-layer');
@@ -59,6 +62,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Function to update mountain SVG colors from CSS variables
+    function updateMountainColors() {
+        const farColor = getComputedStyle(document.documentElement)
+            .getPropertyValue('--mountains-far-color').trim();
+        const farMidColor = getComputedStyle(document.documentElement)
+            .getPropertyValue('--mountains-mid-color').trim();
+        const nearColor = getComputedStyle(document.documentElement)
+            .getPropertyValue('--mountains-near-color').trim();
+            
+        // Create SVG strings with the colors from CSS variables
+        const farSvg = createMountainSvg('far', farColor);
+        const farMidSvg = createMountainSvg('mid', farMidColor);
+        const nearSvg = createMountainSvg('near', nearColor);
+        
+        // Apply the SVGs to the mountain layers
+        document.querySelector('.mountains-far-layer').style.backgroundImage = `url('data:image/svg+xml;utf8,${farSvg}')`;
+        document.querySelector('.mountains-mid-layer').style.backgroundImage = `url('data:image/svg+xml;utf8,${farMidSvg}')`;
+        document.querySelector('.mountains-near-layer').style.backgroundImage = `url('data:image/svg+xml;utf8,${nearSvg}')`;
+    }
+    
+    // Helper function to create mountain SVGs with the right path and color
+    function createMountainSvg(type, color) {
+        // SVG paths for different mountain types
+        const paths = {
+            'far': 'M0,300 L0,220 L100,190 L200,220 L240,205 L300,230 L380,165 L450,190 L520,140 L600,190 L700,230 L750,160 L820,190 L900,220 L1000,180 L1080,200 L1150,140 L1200,170 L1200,300 Z',
+            'mid': 'M0,300 L0,235 L70,215 L130,235 L180,205 L220,235 L290,195 L350,215 L430,185 L490,215 L550,195 L620,215 L720,175 L820,205 L900,185 L980,215 L1050,195 L1120,215 L1200,195 L1200,300 Z',
+            'near': 'M0,300 L0,230 L45,220 L65,225 L80,210 L95,215 L120,220 L150,230 L180,225 L215,210 L250,190 L270,200 L300,230 L330,220 L350,215 L380,210 L410,220 L450,230 L480,225 L510,215 L550,180 L590,190 L620,200 L650,210 L690,200 L715,190 L780,180 L810,190 L850,215 L900,200 L935,185 L970,175 L1000,190 L1050,210 L1090,200 L1150,190 L1200,210 L1200,300 Z'
+        };
+        
+        // Create SVG with the correct path and color
+        const encodedColor = color.replace('#', '%23');
+        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="${paths[type]}" fill="${encodedColor}"/></svg>`;
+    }
+    
     // Prevent scroll on mobile
     function preventScroll(e) {
         e.preventDefault();
@@ -68,6 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleResize() {
         // Position elements appropriately for the new viewport size
         positionElementsForViewport();
+        // Update mountain colors (in case CSS variables changed)
+        updateMountainColors();
     }
     
     // Position elements appropriately for viewport
@@ -144,6 +183,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     layer.style.transform = config.transform;
                 }
             });
+            
+            // Update mountain colors in case they were reset
+            updateMountainColors();
         }
     }
     

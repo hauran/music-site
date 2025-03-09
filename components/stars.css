@@ -1,0 +1,90 @@
+/* Stars Component Styles */
+
+/* Stars layer with radial gradients */
+.stars-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%; /* Cover the entire scene height */
+    top: 0;
+    left: 0;
+    background-color: transparent; /* Start with a transparent background */
+    /* No animation of background-image, set it all directly here */
+    background-image: 
+        /* Large bright stars - increased opacity */
+        radial-gradient(circle, rgba(255, 255, 255, 1) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.95) 1px, transparent 1px),
+        /* Medium stars - increased opacity */
+        radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.8px, transparent 0.8px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.85) 0.8px, transparent 0.8px),
+        /* Small stars - increased opacity */
+        radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.5px, transparent 0.5px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.8) 0.5px, transparent 0.5px);
+    
+    /* Many different sizes to prevent patterns and ensure full coverage */
+    background-size: 
+        170px 170px, /* Large bright stars */
+        190px 190px,
+        130px 130px, /* Medium stars */
+        110px 110px,
+        80px 80px,   /* Small stars */
+        70px 70px;
+    
+    /* Many different positions to ensure stars on the sides */
+    background-position: 
+        0px 0px, 
+        90px 25px, 
+        30px 45px, 
+        60px 85px, 
+        20px 10px, 
+        50px 50px;
+    
+    z-index: 2;
+    opacity: 1; /* Increased opacity from 0.8 to 1 for full visibility */
+    animation: starsBrightening 300s linear forwards;
+    will-change: opacity; /* Only animate opacity, nothing else */
+}
+
+/* Individual stars that twinkle */
+.star {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.9); /* Increased from 0.8 to 0.9 */
+    border-radius: 50%;
+    animation: twinkle linear infinite;
+    transform-origin: center;
+    /* Add a subtle glow effect */
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Twinkling animation - more pronounced opacity and scale changes */
+@keyframes twinkle {
+    0% {
+        opacity: 0.8; /* Increased from 0.7 */
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 1; /* Increased from 0.9 to 1 (full brightness) */
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 0.8; /* Increased from 0.7 */
+        transform: scale(0.9);
+    }
+}
+
+/* Stars brightening animation */
+@keyframes starsBrightening {
+    0% {
+        opacity: 0.4; /* Increased from 0.2 */
+    }
+    100% {
+        opacity: 1; /* Increased from 0.8 to 1 */
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .star {
+        max-width: 2px;
+        max-height: 2px;
+    }
+} 

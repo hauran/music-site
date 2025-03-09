@@ -1,0 +1,49 @@
+/* Shooting Stars Component Styles */
+
+/* Container for shooting stars */
+.shooting-stars-layer {
+    position: absolute;
+    width: 100%;
+    height: 70%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: visible;
+}
+
+/* Wrapper for each shooting star */
+.shooting-star-wrapper {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    will-change: opacity, transform, left, top;
+}
+
+/* Shooting star animations */
+@keyframes moveAcrossSky {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100vw) translateY(50vh);
+        opacity: 0;
+    }
+}
+
+/* For smaller screens, adjust the shooting star size */
+@media (max-width: 768px) {
+    .shooting-stars-layer {
+        height: 60%;
+    }
+} 

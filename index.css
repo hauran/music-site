@@ -15,8 +15,8 @@ body {
     position: fixed; /* Ensure no bouncing/scrolling on mobile */
 }
 
-/* Game container - parent of all scene elements */
-.game-container {
+/* parent of all scene elements */
+.scene-container {
     position: absolute;
     width: 100%;
     height: 100%;

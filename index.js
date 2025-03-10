@@ -32,8 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize
     function init() {
-        // Keep the loading overlay visible while initializing
-        
         // Set up event listeners
         window.addEventListener('resize', handleResize);
         
@@ -53,11 +51,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Apply mountain colors from CSS variables
         updateMountainColors();
         
+        // Explicitly apply mountain styles to ensure CSS variables are respected
+        applyMountainStyles();
+        
         // After everything is initialized, reveal the scene
         window.addEventListener('load', revealScene);
         
         // If all assets are already loaded, reveal scene after a short delay
         setTimeout(revealScene, 500);
+        
+        // Make sure mountain styles are applied after a delay
+        setTimeout(applyMountainStyles, 1000);
         
         // Add a periodic check to ensure mountains remain visible
         if (window.innerWidth <= 768) {
@@ -133,6 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
         positionElementsForViewport();
         // Update mountain colors (in case CSS variables changed)
         updateMountainColors();
+        // Explicitly apply mountain styles
+        applyMountainStyles();
         
         // Handle moon responsive adjustments
         adjustMoonForViewport();
@@ -197,17 +203,25 @@ document.addEventListener('DOMContentLoaded', () => {
             adjustMoonForViewport();
             
         } else {
-            // Reset any mobile-specific positioning
+            // Desktop mode: Reset inline styles
             sceneLayers.forEach(layer => {
-                layer.style.top = '';
-                layer.style.height = '';
-                layer.style.bottom = '';
-                layer.style.display = '';
-                layer.style.visibility = '';
-                layer.style.opacity = '';
-                layer.style.backgroundPosition = '';
-                layer.style.transform = '';
+                const className = layer.className.split(' ')[1]; // Get the second class name
+                
+                // For non-mountain layers, reset all inline styles
+                if (!className.includes('mountains-')) {
+                    layer.style.top = '';
+                    layer.style.height = '';
+                    layer.style.bottom = '';
+                    layer.style.display = '';
+                    layer.style.visibility = '';
+                    layer.style.opacity = '';
+                    layer.style.backgroundPosition = '';
+                    layer.style.transform = '';
+                }
             });
+            
+            // Explicitly apply mountain styles after clearing
+            applyMountainStyles();
             
             // Adjust the moon for desktop viewport
             adjustMoonForViewport();
@@ -242,6 +256,48 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Also ensure moon is properly positioned
             adjustMoonForViewport();
+        }
+    }
+    
+    // Function to explicitly apply mountain styles from CSS variables
+    function applyMountainStyles() {
+        // Only apply in desktop mode
+        if (window.innerWidth > 768) {
+            // Get CSS variables directly from :root
+            const style = getComputedStyle(document.documentElement);
+            
+            // Apply to far mountains
+            const farLayer = document.querySelector('.mountains-far-layer');
+            if (farLayer) {
+                farLayer.style.transform = style.getPropertyValue('--mountains-far-transform');
+                farLayer.style.filter = 'blur(' + style.getPropertyValue('--mountains-far-blur') + ')';
+                farLayer.style.bottom = '0';
+                farLayer.style.backgroundSize = style.getPropertyValue('--mountains-far-bg-size');
+            }
+            
+            // Apply to mid mountains
+            const midLayer = document.querySelector('.mountains-mid-layer');
+            if (midLayer) {
+                midLayer.style.transform = style.getPropertyValue('--mountains-mid-transform');
+                midLayer.style.filter = 'blur(' + style.getPropertyValue('--mountains-mid-blur') + ')';
+                midLayer.style.bottom = '0';
+                midLayer.style.backgroundSize = style.getPropertyValue('--mountains-mid-bg-size');
+            }
+            
+            // Apply to near mountains
+            const nearLayer = document.querySelector('.mountains-near-layer');
+            if (nearLayer) {
+                nearLayer.style.transform = style.getPropertyValue('--mountains-near-transform');
+                nearLayer.style.filter = 'blur(' + style.getPropertyValue('--mountains-near-blur') + ')';
+                nearLayer.style.bottom = '0';
+                nearLayer.style.backgroundSize = style.getPropertyValue('--mountains-near-bg-size');
+            }
+            
+            console.log('Applied mountain styles from CSS variables:', {
+                far: style.getPropertyValue('--mountains-far-transform'),
+                mid: style.getPropertyValue('--mountains-mid-transform'),
+                near: style.getPropertyValue('--mountains-near-transform')
+            });
         }
     }
     

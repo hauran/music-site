@@ -33,9 +33,13 @@ class StarsComponent {
             star.style.left = `${Math.random() * 100}%`;
             star.style.top = `${Math.random() * 100}%`;
             
-            // Higher base opacity for brighter stars
-            const baseOpacity = Math.random() * 0.2 + 0.8; // Between 0.8-1.0 (increased from 0.5-0.8)
-            star.style.opacity = baseOpacity;
+            // Star brightness variations - will be applied along with CSS transition from day to night
+            // We'll set a relative brightness factor that affects the final opacity at night
+            const brightnessFactor = Math.random() * 0.2 + 0.8; // Between 0.8-1.0 for varied star brightness
+            star.dataset.brightness = brightnessFactor; // Store for potential later use
+            
+            // The initial opacity is handled by CSS, so we don't explicitly set it here
+            // The CSS transition will handle the day-to-night opacity change
             
             // Add glow effect to some stars
             if (Math.random() < 0.3 && size > 1) { // 30% of stars larger than 1px get a glow

@@ -39,9 +39,14 @@
         50px 50px;
     
     z-index: 2; /* Keeping z-index at 2, which is lower than moon-layer (5) and crescent-moon (6) */
-    opacity: 1; /* Increased opacity from 0.8 to 1 for full visibility */
-    animation: starsBrightening 300s linear forwards;
+    opacity: 0.3; /* Start almost invisible during day */
+    transition: opacity 180s ease-in-out; /* Match sky transition timing (180s) */
     will-change: opacity; /* Only animate opacity, nothing else */
+}
+
+/* When night class is added to sky layer, brighten the stars */
+.sky-layer.night ~ .stars-layer {
+    opacity: 1; /* Fully visible at night */
 }
 
 /* Individual stars that twinkle */
@@ -54,31 +59,28 @@
     /* Add a subtle glow effect */
     box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
     z-index: 2; /* Ensure stars stay behind the moon layer (z-index: 5) */
+    opacity: 0.3; /* Start almost invisible during day */
+    transition: opacity 180s ease-in-out; /* Match sky transition timing */
 }
 
-/* Twinkling animation - more pronounced opacity and scale changes */
+/* When night class is added to sky layer, brighten individual stars */
+.sky-layer.night ~ .stars-layer .star {
+    opacity: 0.8; /* Base visibility at night, modified by animation */
+}
+
+/* Twinkling animation - using brightness and transform only */
 @keyframes twinkle {
     0% {
-        opacity: 0.8; /* Increased from 0.7 */
+        filter: brightness(0.8);
         transform: scale(0.9);
     }
     50% {
-        opacity: 1; /* Increased from 0.9 to 1 (full brightness) */
+        filter: brightness(1.5); /* Brighter at peak */
         transform: scale(1.1);
     }
     100% {
-        opacity: 0.8; /* Increased from 0.7 */
+        filter: brightness(0.8);
         transform: scale(0.9);
-    }
-}
-
-/* Stars brightening animation */
-@keyframes starsBrightening {
-    0% {
-        opacity: 0.4; /* Increased from 0.2 */
-    }
-    100% {
-        opacity: 1; /* Increased from 0.8 to 1 */
     }
 }
 

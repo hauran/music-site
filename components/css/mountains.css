@@ -14,17 +14,17 @@
     --mountains-near-color: #3a465c; 
     
     /* Blur levels */
-    --mountains-far-blur: 5px;
+    --mountains-far-blur: 7px;
     --mountains-mid-blur: 3.5px;
     --mountains-near-blur: 1.5px;
     
     /* Positioning */
-    --mountains-far-transform: translateX(17%);
-    --mountains-mid-transform: translateX(10%);
-    --mountains-near-transform: translateX(0%);
+    --mountains-far-transform: translateX(17%) translateY(-110px);
+    --mountains-mid-transform: translateX(10%) translateY(-140px);
+    --mountains-near-transform: translateX(0%) translateY(-150px);
     
     /* Background sizing */
-    --mountains-far-bg-size: 120% 109%;
+    --mountains-far-bg-size: 150% 109%;
     --mountains-mid-bg-size: 130% 115%;
     --mountains-near-bg-size: 135% 85%;
     
@@ -32,9 +32,9 @@
     --mountains-far-mobile-bottom: 16%;
     --mountains-mid-mobile-bottom: 14%;
     --mountains-near-mobile-bottom: 11%;
-    --mountains-far-mobile-transform: translateX(0%);
-    --mountains-mid-mobile-transform: translateX(-10%);
-    --mountains-near-mobile-transform: translateX(5%);
+    --mountains-far-mobile-transform: translateX(0%) translateY(-110px);
+    --mountains-mid-mobile-transform: translateX(-10%) translateY(-110px);
+    --mountains-near-mobile-transform: translateX(5%) translateY(-90px);
 }
 
 /* Z-index values for layer stacking */

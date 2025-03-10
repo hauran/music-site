@@ -30,6 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
+    // Forest layers configuration
+    const forestLayers = {
+        'forest-background-layer': {
+            transform: computedStyle.getPropertyValue('--forest-background-mobile-transform').trim()
+        },
+        'forest-midground-layer': {
+            transform: computedStyle.getPropertyValue('--forest-midground-mobile-transform').trim()
+        },
+        'forest-foreground-layer': {
+            transform: computedStyle.getPropertyValue('--forest-foreground-mobile-transform').trim()
+        },
+        'forest-grass-layer': {
+            transform: computedStyle.getPropertyValue('--forest-grass-mobile-transform').trim()
+        }
+    };
+    
     // Initialize
     function init() {
         // Set up event listeners
@@ -54,14 +70,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // Explicitly apply mountain styles to ensure CSS variables are respected
         applyMountainStyles();
         
+        // Apply forest styles
+        applyForestStyles();
+        
         // After everything is initialized, reveal the scene
         window.addEventListener('load', revealScene);
         
         // If all assets are already loaded, reveal scene after a short delay
         setTimeout(revealScene, 500);
         
-        // Make sure mountain styles are applied after a delay
-        setTimeout(applyMountainStyles, 1000);
+        // Make sure mountain and forest styles are applied after a delay
+        setTimeout(() => {
+            applyMountainStyles();
+            applyForestStyles();
+        }, 1000);
         
         // Add a periodic check to ensure mountains remain visible
         if (window.innerWidth <= 768) {
@@ -137,8 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
         positionElementsForViewport();
         // Update mountain colors (in case CSS variables changed)
         updateMountainColors();
-        // Explicitly apply mountain styles
+        // Explicitly apply mountain and forest styles
         applyMountainStyles();
+        applyForestStyles();
         
         // Handle moon responsive adjustments
         adjustMoonForViewport();
@@ -197,6 +220,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Force layout recalculation to ensure visibility
                     void layer.offsetHeight;
                 }
+                // Handle forest layers using the forest configuration object
+                else if (forestLayers[className]) {
+                    const config = forestLayers[className];
+                    
+                    // Apply the transform from configuration
+                    layer.style.transform = config.transform;
+                    layer.style.bottom = '0';
+                    
+                    // Force layout recalculation to ensure visibility
+                    void layer.offsetHeight;
+                }
             });
             
             // Adjust the moon for mobile viewport
@@ -207,8 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
             sceneLayers.forEach(layer => {
                 const className = layer.className.split(' ')[1]; // Get the second class name
                 
-                // For non-mountain layers, reset all inline styles
-                if (!className.includes('mountains-')) {
+                // Skip mountain and forest layers - they'll be handled separately
+                if (!className.includes('mountains-') && !className.includes('forest-')) {
                     layer.style.top = '';
                     layer.style.height = '';
                     layer.style.bottom = '';
@@ -220,8 +254,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             
-            // Explicitly apply mountain styles after clearing
+            // Explicitly apply mountain and forest styles after clearing
             applyMountainStyles();
+            applyForestStyles();
             
             // Adjust the moon for desktop viewport
             adjustMoonForViewport();
@@ -248,6 +283,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     layer.style.bottom = config.bottom;
                     layer.style.height = '45%';
                     layer.style.transform = config.transform;
+                }
+            });
+            
+            // Also ensure forest layers maintain their mobile positions
+            Object.entries(forestLayers).forEach(([className, config]) => {
+                const layer = document.querySelector(`.${className}`);
+                if (layer) {
+                    layer.style.transform = config.transform;
+                    layer.style.bottom = '0';
                 }
             });
             
@@ -298,6 +342,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 mid: style.getPropertyValue('--mountains-mid-transform'),
                 near: style.getPropertyValue('--mountains-near-transform')
             });
+        }
+    }
+    
+    // Function to explicitly apply forest styles from CSS variables
+    function applyForestStyles() {
+        // Get CSS variables directly from :root
+        const style = getComputedStyle(document.documentElement);
+        
+        if (window.innerWidth > 768) {
+            // Desktop mode: Apply desktop transforms
+            
+            // Apply to forest background layer
+            const backgroundLayer = document.querySelector('.forest-background-layer');
+            if (backgroundLayer) {
+                backgroundLayer.style.transform = style.getPropertyValue('--forest-background-transform');
+                backgroundLayer.style.bottom = '0';
+            }
+            
+            // Apply to forest midground layer
+            const midgroundLayer = document.querySelector('.forest-midground-layer');
+            if (midgroundLayer) {
+                midgroundLayer.style.transform = style.getPropertyValue('--forest-midground-transform');
+                midgroundLayer.style.bottom = '0';
+            }
+            
+            // Apply to forest foreground layer
+            const foregroundLayer = document.querySelector('.forest-foreground-layer');
+            if (foregroundLayer) {
+                foregroundLayer.style.transform = style.getPropertyValue('--forest-foreground-transform');
+                foregroundLayer.style.bottom = '0';
+            }
+            
+            // Apply to forest grass layer
+            const grassLayer = document.querySelector('.forest-grass-layer');
+            if (grassLayer) {
+                grassLayer.style.transform = style.getPropertyValue('--forest-grass-transform');
+                grassLayer.style.bottom = '0';
+                grassLayer.style.top = 'auto';
+            }
+            
+            console.log('Applied forest desktop transforms from CSS variables');
+        } else {
+            // Mobile mode: Apply mobile transforms
+            
+            // Apply mobile transforms to each forest layer
+            Object.entries(forestLayers).forEach(([className, config]) => {
+                const layer = document.querySelector(`.${className}`);
+                if (layer) {
+                    layer.style.transform = config.transform;
+                    layer.style.bottom = '0';
+                    
+                    // For the grass layer, ensure it stays at the bottom
+                    if (className === 'forest-grass-layer') {
+                        layer.style.top = 'auto';
+                    }
+                }
+            });
+            
+            console.log('Applied forest mobile transforms from CSS variables');
         }
     }
     

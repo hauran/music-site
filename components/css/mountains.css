@@ -19,22 +19,22 @@
     --mountains-near-blur: 1.5px;
     
     /* Positioning */
-    --mountains-far-transform: translateX(17%) translateY(-110px);
-    --mountains-mid-transform: translateX(10%) translateY(-140px);
+    --mountains-far-transform: translateX(18%) translateY(-50px);
+    --mountains-mid-transform: translateX(12%) translateY(-140px);
     --mountains-near-transform: translateX(0%) translateY(-150px);
     
     /* Background sizing */
-    --mountains-far-bg-size: 150% 109%;
+    --mountains-far-bg-size: 190% 109%;
     --mountains-mid-bg-size: 130% 115%;
     --mountains-near-bg-size: 135% 85%;
     
     /* Mobile specific */
     --mountains-far-mobile-bottom: 16%;
     --mountains-mid-mobile-bottom: 14%;
-    --mountains-near-mobile-bottom: 11%;
-    --mountains-far-mobile-transform: translateX(0%) translateY(-110px);
-    --mountains-mid-mobile-transform: translateX(-10%) translateY(-110px);
-    --mountains-near-mobile-transform: translateX(5%) translateY(-90px);
+    --mountains-near-mobile-bottom: 10%;
+    --mountains-far-mobile-transform: translateX(20%) translateY(-110px);
+    --mountains-mid-mobile-transform: translateX(5%) translateY(-110px);
+    --mountains-near-mobile-transform: translateX(0%) translateY(-70px);
 }
 
 /* Z-index values for layer stacking */

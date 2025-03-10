@@ -93,7 +93,7 @@ class ShootingStarsComponent {
         wrapper.style.pointerEvents = 'none';
         
         // Set random tail appearance
-        const tailLength = 40 + Math.random() * 80; // 40-120px
+        const tailLength = 40 + Math.random() * 40; // 40-120px
         const tailWidth = 1 + Math.random() * 3; // 1-4px (slightly wider than before)
         
         // Calculate the angle of travel
@@ -128,7 +128,7 @@ class ShootingStarsComponent {
         this.container.appendChild(wrapper);
         
         // Animation timing
-        const totalDuration = 1000 + Math.random() * 3000; // 1-4 seconds total
+        const totalDuration = 2000 + Math.random() * 2000; // 1-4 seconds total
         const fadeInTime = totalDuration * 0.1;
         const fadeOutTime = totalDuration * 0.3;
         

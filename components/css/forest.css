@@ -15,8 +15,8 @@
     --forest-grass-transform: none;
     
     /* Mobile transforms */
-    --forest-background-mobile-transform: translateX(43px) translateY(40px);
-    --forest-midground-mobile-transform: scale(0.8) translateY(0px) translateX(60px);
+    --forest-background-mobile-transform: translateY(40px);
+    --forest-midground-mobile-transform: translateY(0px);
     --forest-foreground-mobile-transform:translateY(-30px);
     --forest-grass-mobile-transform: translateY(30px);
 }
@@ -72,7 +72,7 @@
     }
     
     .forest-midground-layer {
-        transform: var(--forest-midground-mobile-transform);
+        display: none;
     }
     
     .forest-foreground-layer {

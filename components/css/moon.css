@@ -73,7 +73,7 @@
 
 /* Moon arc animation - starts when the .rise class is added */
 .crescent-moon.rise {
-    animation: moonArc var(--moon-arc-duration) var(--moon-arc-delay) ease-in-out forwards;
+    animation: moonArc var(--moon-arc-duration) var(--moon-arc-delay) ease-out forwards;
 }
 
 /* The arc animation keyframes */

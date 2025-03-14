@@ -49,7 +49,7 @@ class StarsComponent {
             }
             
             // Random animation duration and delay for twinkling effect
-            const twinkleDuration = Math.random() * 0.8 + 0.2; // Between 0.2-1 second
+            const twinkleDuration = Math.random() * 2 + 1; // Between 1-3 seconds 
             star.style.animationDuration = `${twinkleDuration}s`;
             star.style.animationDelay = `${Math.random() * 2}s`; // Random delay up to 2 seconds
             

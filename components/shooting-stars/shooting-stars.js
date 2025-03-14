@@ -6,15 +6,17 @@ class ShootingStarsComponent {
         this.gameContainer = gameContainer;
         this.container = document.querySelector('.shooting-stars-layer');
         this.activeShootingStars = 0;
-        this.MAX_SHOOTING_STARS = 2;
+        this.MAX_SHOOTING_STARS = 1;
     }
     
     init() {
         // Clear any existing shooting stars from the HTML
         this.container.innerHTML = '';
         
-        // Start the shooting stars generation
-        this.createRandomShootingStar();
+        // Start the shooting stars generation with a longer initial delay
+        setTimeout(() => {
+            this.createRandomShootingStar();
+        }, 10000 * Math.random());
         
         // Begin additional shooting stars with staggered delays - but don't exceed our maximum
         setTimeout(() => {
@@ -211,7 +213,7 @@ class ShootingStarsComponent {
                 this.activeShootingStars--;
                 
                 // Schedule next star with random delay
-                const nextDelay = 8000 + Math.random() * 10000; // 8-18 seconds
+                const nextDelay = 25000 + Math.random() * 20000; // 25-45 seconds (increased from 8-18 seconds)
                 setTimeout(() => this.createRandomShootingStar(), nextDelay);
             }
         };
@@ -221,7 +223,7 @@ class ShootingStarsComponent {
         
         // Create potential additional simultaneous star with low probability
         // But only if we're not already at the maximum
-        if (Math.random() < 0.05 && this.activeShootingStars < this.MAX_SHOOTING_STARS) { // 5% chance of "meteor shower" effect
+        if (Math.random() < 0.01 && this.activeShootingStars < this.MAX_SHOOTING_STARS) { // 1% chance (reduced from 5%)
             setTimeout(() => {
                 this.createRandomShootingStar();
             }, Math.random() * 1000);

@@ -17,7 +17,7 @@
     top: 30%; 
     box-shadow: 0 0 80px 20px rgba(255, 207, 124, 0.8);
     filter: blur(4px);
-    animation: sunSet 180s linear forwards;
+    animation: sunSet 180s ease-in forwards;
     will-change: opacity, background, box-shadow, top;
     z-index: 4; /* Ensure sun is behind mountains but in front of sky */
 }

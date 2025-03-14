@@ -110,6 +110,6 @@ body {
 @media (max-width: 768px) {
     .scene-container {
         position: relative;
-        top: -100px;
+        top: -50px;
     }
 } 

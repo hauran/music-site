@@ -34,7 +34,7 @@
     --mountains-near-mobile-bottom: 10%;
     --mountains-far-mobile-transform: translateX(27%) translateY(-80px);
     --mountains-mid-mobile-transform: translateX(2%) translateY(-26px);
-    --mountains-near-mobile-transform: translateX(0%) translateY(-40px);
+    --mountains-near-mobile-transform: translateX(0%) translateY(-35px);
 }
 
 /* Z-index values for layer stacking */

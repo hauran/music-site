@@ -32,9 +32,9 @@
     --mountains-far-mobile-bottom: 16%;
     --mountains-mid-mobile-bottom: 14%;
     --mountains-near-mobile-bottom: 10%;
-    --mountains-far-mobile-transform: translateX(27%) translateY(-80px);
-    --mountains-mid-mobile-transform: translateX(2%) translateY(-26px);
-    --mountains-near-mobile-transform: translateX(0%) translateY(-35px);
+    --mountains-far-mobile-transform: translateX(27%) translateY(-40px) scaleX(1.5);
+    --mountains-mid-mobile-transform: translateX(-11%) translateY(-34px) scaleX(1.2);
+    --mountains-near-mobile-transform: translateX(20%) translateY(-10px) scaleX(1.3);
 }
 
 /* Z-index values for layer stacking */
